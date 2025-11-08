@@ -1,0 +1,29 @@
+.hero-section {
+	background: linear-gradient(180deg, #f2fbff 0%, #ffffff 100%);
+}
+.hero-illustration { max-height: 400px; }
+.pill-bg {
+	position: absolute; right: -120px; top: -80px; width: 520px; height: 520px;
+	background: radial-gradient(ellipse at center, rgba(0,123,255,0.1) 0, rgba(0,123,255,0) 70%);
+	filter: blur(0.5px);
+}
+.feature-card .icon-wrap {
+	width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center;
+	border-radius: 10px; font-size: 1.1rem;
+}
+.btn-primary { background-color: #1971c2; border-color: #1971c2; }
+.btn-primary:hover { background-color: #145ea3; border-color: #145ea3; }
+.btn-outline-primary { color: #1971c2; border-color: #1971c2; }
+.btn-outline-primary:hover { background-color: #1971c2; border-color: #1971c2; }
+
+.ocr-preview {
+	background: #f8f9fa; border: 1px dashed #dee2e6; border-radius: 8px; min-height: 180px;
+}
+
+.map-container { height: 60vh; border-radius: 12px; overflow: hidden; }
+
+.badge-availability { font-weight: 600; }
+
+.form-auth { max-width: 460px; }
+
+
