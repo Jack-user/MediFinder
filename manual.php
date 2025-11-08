@@ -15,7 +15,7 @@ session_start();
     <meta name="author" content="MediFinder" />
 
     <!-- [Favicon] icon -->
-    <link rel="icon" href="/CEMO_System/system/assets/img/medifinder-logo.svg" type="image/x-icon" />
+    <link rel="icon" href="/medi/assets/img/medifinder-logo.svg" type="image/x-icon" />
 
     <?php include 'includes/head-css.php'; ?>
   </head>
@@ -78,7 +78,7 @@ session_start();
         const text = document.getElementById('inputText').value.trim();
         if (!text) return;
         results.innerHTML = 'Analyzing...';
-        const res = await fetch('/CEMO_System/system/api/analyze.php', {
+        const res = await fetch('/medi/api/analyze.php', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text })
         });
@@ -101,7 +101,7 @@ session_start();
                                 ${item.alternatives && item.alternatives.length ? `<div class="mt-1 small"><span class="text-success">Alternatives:</span> ${item.alternatives.map(escapeHtml).join(', ')}</div>` : ''}
                             </div>
                             <div>
-                                <a class="btn btn-sm btn-outline-primary" href="/CEMO_System/system/locator.php?query=${encodeURIComponent(item.name)}">Find nearby</a>
+                                <a class="btn btn-sm btn-outline-primary" href="/medi/locator.php?query=${encodeURIComponent(item.name)}">Find nearby</a>
                             </div>
                         </div>
                     </div>

@@ -10,8 +10,8 @@ $isLoggedIn = isset($_SESSION['user_id']);
     <title>MediFinder — Find the right medicine fast</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
-    <link href="/CEMO_System/system/assets/css/style.css" rel="stylesheet" />
-    <link rel="icon" href="/CEMO_System/system/assets/img/medifinder-logo.svg" />
+    <link href="/medi/assets/css/style.css" rel="stylesheet" />
+    <link rel="icon" href="/medi/assets/img/medifinder-logo.svg" />
     <style>
         :root {
             --primary: #0d6efd;
@@ -350,8 +350,8 @@ $isLoggedIn = isset($_SESSION['user_id']);
 <body>
     <nav class="navbar navbar-expand-lg navbar-light shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="/CEMO_System/system/">
-                <img src="/CEMO_System/system/assets/img/medifinder-logo.svg" alt="MediFinder" width="40" height="40" class="me-2">
+            <a class="navbar-brand d-flex align-items-center" href="/medi/">
+                <img src="/medi/assets/img/medifinder-logo.svg" alt="MediFinder" width="40" height="40" class="me-2">
                 <strong style="font-size: 1.3rem;">MediFinder</strong>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -362,10 +362,10 @@ $isLoggedIn = isset($_SESSION['user_id']);
                     <li class="nav-item"><a class="nav-link fw-semibold" href="#features">Features</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold" href="#how-it-works">How It Works</a></li>
                     <?php if ($isLoggedIn): ?>
-                        <li class="nav-item"><a class="nav-link fw-semibold" href="/CEMO_System/system/reminders.php">Reminders</a></li>
-                        <li class="nav-item"><a class="btn btn-outline-danger ms-lg-3 rounded-pill" href="/CEMO_System/system/auth/logout.php">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link fw-semibold" href="/medi/reminders.php">Reminders</a></li>
+                        <li class="nav-item"><a class="btn btn-outline-danger ms-lg-3 rounded-pill" href="/medi/auth/logout.php">Logout</a></li>
                     <?php else: ?>
-                        <li class="nav-item"><a class="btn btn-primary ms-lg-3 rounded-pill px-4" href="/CEMO_System/system/auth/login.php">Login</a></li>
+                        <li class="nav-item"><a class="btn btn-primary ms-lg-3 rounded-pill px-4" href="/medi/auth/login.php">Login</a></li>
                     <?php endif; ?>
                 </ul>
             </div>
@@ -387,7 +387,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
                     <h1 class="display-4 mb-4">Find the Right Medicine Fast & Safely</h1>
                     <p class="mb-4">MediFinder uses advanced AI to analyze prescriptions, recommend safe alternatives, and locate nearby pharmacies with likely stock availability.</p>
                     <div class="d-flex gap-3 flex-wrap">
-                        <a href="/CEMO_System/system/auth/login.php" class="btn btn-light btn-hero">
+                        <a href="/medi/auth/login.php" class="btn btn-light btn-hero">
                             <i class="fa-solid fa-camera me-2"></i>Get Started Free
                         </a>
                         <a href="#features" class="btn btn-outline-light btn-hero">
@@ -407,7 +407,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
                     </div>
                 </div>
                 <div class="col-lg-6 text-center mt-5 mt-lg-0">
-                    <img src="/CEMO_System/system/assets/img/hero-medicine.svg" class="img-fluid hero-illustration" alt="Medicine Illustration" style="max-width: 500px;">
+                    <img src="/medi/assets/img/hero-medicine.svg" class="img-fluid hero-illustration" alt="Medicine Illustration" style="max-width: 500px;">
                 </div>
             </div>
         </div>
@@ -532,7 +532,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
             <div class="cta-card fade-in">
                 <div class="row align-items-center g-4">
                     <div class="col-lg-6">
-                        <img src="/CEMO_System/system/assets/img/prescription-mock.svg" class="img-fluid rounded" alt="Prescription Upload" style="max-width: 400px;">
+                        <img src="/medi/assets/img/prescription-mock.svg" class="img-fluid rounded" alt="Prescription Upload" style="max-width: 400px;">
                     </div>
                     <div class="col-lg-6 position-relative">
                         <h3 class="fw-bold display-6 mb-4">Start Your Free Account Today</h3>
@@ -544,11 +544,11 @@ $isLoggedIn = isset($_SESSION['user_id']);
                             <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Multi-device sync</li>
                         </ul>
                         <?php if (!$isLoggedIn): ?>
-                            <a href="/CEMO_System/system/auth/register.php" class="btn btn-success btn-lg rounded-pill px-5">
+                            <a href="/medi/auth/register.php" class="btn btn-success btn-lg rounded-pill px-5">
                                 <i class="fa-solid fa-user-plus me-2"></i>Create Free Account
                             </a>
                         <?php else: ?>
-                            <a href="/CEMO_System/system/prescription.php" class="btn btn-success btn-lg rounded-pill px-5">
+                            <a href="/medi/prescription.php" class="btn btn-success btn-lg rounded-pill px-5">
                                 <i class="fa-solid fa-arrow-right me-2"></i>Continue to Dashboard
                             </a>
                         <?php endif; ?>
@@ -563,7 +563,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="d-flex align-items-center mb-3">
-                        <img src="/CEMO_System/system/assets/img/medifinder-logo.svg" alt="MediFinder" width="32" height="32" class="me-2" style="filter: brightness(0) invert(1);">
+                        <img src="/medi/assets/img/medifinder-logo.svg" alt="MediFinder" width="32" height="32" class="me-2" style="filter: brightness(0) invert(1);">
                         <strong class="fs-5">MediFinder</strong>
                     </div>
                     <p class="text-white-50">Your trusted partner in finding the right medicine, fast and safely.</p>
@@ -573,14 +573,14 @@ $isLoggedIn = isset($_SESSION['user_id']);
                     <ul class="list-unstyled">
                         <li class="mb-2"><a href="#features">Features</a></li>
                         <li class="mb-2"><a href="#how-it-works">How It Works</a></li>
-                        <li class="mb-2"><a href="/CEMO_System/system/locator.php">Pharmacies</a></li>
+                        <li class="mb-2"><a href="/medi/locator.php">Pharmacies</a></li>
                     </ul>
                 </div>
                 <div class="col-md-2">
                     <h6 class="fw-bold mb-3">Account</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="/CEMO_System/system/auth/login.php">Login</a></li>
-                        <li class="mb-2"><a href="/CEMO_System/system/auth/register.php">Register</a></li>
+                        <li class="mb-2"><a href="/medi/auth/login.php">Login</a></li>
+                        <li class="mb-2"><a href="/medi/auth/register.php">Register</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">

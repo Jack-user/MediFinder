@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__ . '/includes/db.php';
 
 if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] ?? 'patient') !== 'pharmacy_owner') {
-    header('Location: /CEMO_System/system/auth/login.php');
+    header('Location: /medi/auth/login.php');
     exit;
 }
 
@@ -15,7 +15,7 @@ $pharmacy = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
 if (!$pharmacy) {
-    header('Location: /CEMO_System/system/pharmacy_dashboard.php');
+    header('Location: /medi/pharmacy_dashboard.php');
     exit;
 }
 
@@ -74,7 +74,7 @@ if (isset($_GET['edit'])) {
     <meta name="author" content="MediFinder" />
 
     <!-- [Favicon] icon -->
-    <link rel="icon" href="/CEMO_System/system/assets/img/medifinder-logo.svg" type="image/x-icon" />
+    <link rel="icon" href="/medi/assets/img/medifinder-logo.svg" type="image/x-icon" />
 
     <?php include 'includes/head-css.php'; ?>
   </head>
@@ -146,7 +146,7 @@ if (isset($_GET['edit'])) {
                   </div>
                   <?php if ($editItem): ?>
                     <div class="mt-3">
-                      <a href="/CEMO_System/system/pharmacy_inventory.php" class="btn btn-sm btn-outline-secondary">
+                      <a href="/medi/pharmacy_inventory.php" class="btn btn-sm btn-outline-secondary">
                         <i class="feather icon-x mr-1"></i>Cancel
                       </a>
                     </div>
@@ -198,7 +198,7 @@ if (isset($_GET['edit'])) {
                               <?php endif; ?>
                             </td>
                             <td>
-                              <a href="/CEMO_System/system/pharmacy_inventory.php?edit=<?php echo $item['id']; ?>" class="btn btn-sm btn-outline-primary">
+                              <a href="/medi/pharmacy_inventory.php?edit=<?php echo $item['id']; ?>" class="btn btn-sm btn-outline-primary">
                                 <i class="feather icon-edit mr-1"></i>Edit
                               </a>
                             </td>

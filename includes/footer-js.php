@@ -1,11 +1,11 @@
 <!-- Required Js -->
-<script src="/CEMO_System/system/DattaAble-1.0.0/dist/assets/js/plugins/simplebar.min.js"></script>
-<script src="/CEMO_System/system/DattaAble-1.0.0/dist/assets/js/plugins/popper.min.js"></script>
-<script src="/CEMO_System/system/DattaAble-1.0.0/dist/assets/js/icon/custom-icon.js"></script>
-<script src="/CEMO_System/system/DattaAble-1.0.0/dist/assets/js/plugins/feather.min.js"></script>
-<script src="/CEMO_System/system/DattaAble-1.0.0/dist/assets/js/component.js"></script>
-<script src="/CEMO_System/system/DattaAble-1.0.0/dist/assets/js/theme.js"></script>
-<script src="/CEMO_System/system/DattaAble-1.0.0/dist/assets/js/script.js"></script>
+<script src="/medi/DattaAble-1.0.0/dist/assets/js/plugins/simplebar.min.js"></script>
+<script src="/medi/DattaAble-1.0.0/dist/assets/js/plugins/popper.min.js"></script>
+<script src="/medi/DattaAble-1.0.0/dist/assets/js/icon/custom-icon.js"></script>
+<script src="/medi/DattaAble-1.0.0/dist/assets/js/plugins/feather.min.js"></script>
+<script src="/medi/DattaAble-1.0.0/dist/assets/js/component.js"></script>
+<script src="/medi/DattaAble-1.0.0/dist/assets/js/theme.js"></script>
+<script src="/medi/DattaAble-1.0.0/dist/assets/js/script.js"></script>
 
 <div class="floting-button fixed bottom-[50px] right-[30px] z-[1030]">
 </div>

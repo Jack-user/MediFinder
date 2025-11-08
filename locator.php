@@ -16,7 +16,7 @@ $query = isset($_GET['query']) ? trim($_GET['query']) : '';
     <meta name="author" content="MediFinder" />
 
     <!-- [Favicon] icon -->
-    <link rel="icon" href="/CEMO_System/system/assets/img/medifinder-logo.svg" type="image/x-icon" />
+    <link rel="icon" href="/medi/assets/img/medifinder-logo.svg" type="image/x-icon" />
 
     <?php include 'includes/head-css.php'; ?>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -153,7 +153,7 @@ $query = isset($_GET['query']) ? trim($_GET['query']) : '';
         });
         
         const medicine = (medicineQuery.value || '').trim();
-        const url = `/CEMO_System/system/api/get_pharmacies.php?lat=${lat}&lon=${lon}&radius=2.5${medicine ? '&medicine=' + encodeURIComponent(medicine) : ''}`;
+        const url = `/medi/api/get_pharmacies.php?lat=${lat}&lon=${lon}&radius=2.5${medicine ? '&medicine=' + encodeURIComponent(medicine) : ''}`;
         
         try {
             const res = await fetch(url);

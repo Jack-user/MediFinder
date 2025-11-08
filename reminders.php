@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/includes/db.php';
-if (!isset($_SESSION['user_id'])) { header('Location: /CEMO_System/system/auth/login.php'); exit; }
+if (!isset($_SESSION['user_id'])) { header('Location: /medi/auth/login.php'); exit; }
 $userId = (int)$_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -39,7 +39,7 @@ $res->close();
     <meta name="author" content="MediFinder" />
 
     <!-- [Favicon] icon -->
-    <link rel="icon" href="/CEMO_System/system/assets/img/medifinder-logo.svg" type="image/x-icon" />
+    <link rel="icon" href="/medi/assets/img/medifinder-logo.svg" type="image/x-icon" />
 
     <?php include 'includes/head-css.php'; ?>
   </head>
@@ -154,7 +154,7 @@ $res->close();
             const now = Date.now();
             const delay = Math.max(0, ts - now);
             setTimeout(() => {
-                new Notification('MediFinder Reminder', { body: title, icon: '/CEMO_System/system/assets/img/medifinder-logo.svg' });
+                new Notification('MediFinder Reminder', { body: title, icon: '/medi/assets/img/medifinder-logo.svg' });
             }, delay);
             alert('Reminder scheduled in this browser. Keep this tab open.');
         });

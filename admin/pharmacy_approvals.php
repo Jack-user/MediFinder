@@ -4,7 +4,7 @@ require_once __DIR__ . '/../includes/db.php';
 
 // Check if admin
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /CEMO_System/system/auth/login.php');
+    header('Location: /medi/auth/login.php');
     exit;
 }
 
@@ -17,7 +17,7 @@ $stmt->fetch();
 $stmt->close();
 
 if ($role !== 'admin') {
-    header('Location: /CEMO_System/system/dashboard.php');
+    header('Location: /medi/dashboard.php');
     exit;
 }
 
@@ -96,7 +96,7 @@ $stmt->close();
     <meta name="author" content="MediFinder" />
 
     <!-- [Favicon] icon -->
-    <link rel="icon" href="/CEMO_System/system/assets/img/medifinder-logo.svg" type="image/x-icon" />
+    <link rel="icon" href="/medi/assets/img/medifinder-logo.svg" type="image/x-icon" />
 
     <?php include __DIR__ . '/../includes/head-css.php'; ?>
   </head>
@@ -177,7 +177,7 @@ $stmt->close();
                             </div>
                             <?php if ($reg['license_file_path']): ?>
                               <div class="mb-3">
-                                <a href="/CEMO_System/system/<?php echo htmlspecialchars($reg['license_file_path']); ?>" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <a href="/medi/<?php echo htmlspecialchars($reg['license_file_path']); ?>" target="_blank" class="btn btn-sm btn-outline-primary">
                                   <i class="feather icon-file-text mr-1"></i>View License
                                 </a>
                               </div>

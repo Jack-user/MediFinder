@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register Pharmacy — MediFinder</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/CEMO_System/system/assets/css/style.css" rel="stylesheet" />
+    <link href="/medi/assets/css/style.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <style>
@@ -460,7 +460,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="container py-4">
-        <a href="/CEMO_System/system/" class="back-link">
+        <a href="/medi/" class="back-link">
             <i class="fas fa-arrow-left"></i>
             Back to Home
         </a>
@@ -470,7 +470,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="registration-card">
                     <div class="card-header-custom">
                         <div class="logo-badge">
-                            <img src="/CEMO_System/system/assets/img/medifinder-logo.svg" alt="MediFinder">
+                            <img src="/medi/assets/img/medifinder-logo.svg" alt="MediFinder">
                         </div>
                         <h3>Register Your Pharmacy</h3>
                         <p>Join our network and help patients find their medicines faster</p>
@@ -483,7 +483,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <h5>Registration Submitted Successfully!</h5>
                                 <p>Your pharmacy registration has been submitted for review. Our team will verify your information and you'll receive an email notification once approved.</p>
                                 <p class="mb-0"><strong>What's next?</strong> You can login to your account once approved.</p>
-                                <a href="/CEMO_System/system/auth/login.php" class="btn btn-primary mt-3">
+                                <a href="/medi/auth/login.php" class="btn btn-primary mt-3">
                                     <i class="fas fa-sign-in-alt me-2"></i>Go to Login
                                 </a>
                             </div>
@@ -661,7 +661,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <button type="submit" class="btn btn-primary btn-lg">
                                         <i class="fas fa-paper-plane me-2"></i>Submit Registration
                                     </button>
-                                    <a href="/CEMO_System/system/auth/login.php" class="btn btn-outline-secondary">
+                                    <a href="/medi/auth/login.php" class="btn btn-outline-secondary">
                                         <i class="fas fa-sign-in-alt me-2"></i>Already have an account? Login
                                     </a>
                                 </div>

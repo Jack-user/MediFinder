@@ -2,7 +2,7 @@
 session_start();
 require_once __DIR__ . '/../includes/db.php';
 if (!isset($_SESSION['user_id']) || (($_SESSION['user_role'] ?? '') !== 'admin')) {
-    header('Location: /CEMO_System/system/auth/login.php');
+    header('Location: /medi/auth/login.php');
     exit;
 }
 ?>
@@ -20,7 +20,7 @@ if (!isset($_SESSION['user_id']) || (($_SESSION['user_role'] ?? '') !== 'admin')
     <meta name="author" content="MediFinder" />
 
     <!-- [Favicon] icon -->
-    <link rel="icon" href="/CEMO_System/system/assets/img/medifinder-logo.svg" type="image/x-icon" />
+    <link rel="icon" href="/medi/assets/img/medifinder-logo.svg" type="image/x-icon" />
 
     <?php include __DIR__ . '/../includes/head-css.php'; ?>
   </head>
@@ -52,7 +52,7 @@ if (!isset($_SESSION['user_id']) || (($_SESSION['user_role'] ?? '') !== 'admin')
                     <h2 class="mb-1">Admin Dashboard</h2>
                     <p class="text-muted mb-0">Manage pharmacy registrations and system settings</p>
                   </div>
-                  <a class="btn btn-primary" href="/CEMO_System/system/admin/pharmacy_approvals.php">
+                  <a class="btn btn-primary" href="/medi/admin/pharmacy_approvals.php">
                     <i class="feather icon-shield mr-2"></i>Pharmacy Approvals
                   </a>
                 </div>
@@ -68,7 +68,7 @@ if (!isset($_SESSION['user_id']) || (($_SESSION['user_role'] ?? '') !== 'admin')
               <div class="card-body">
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item">
-                    <a href="/CEMO_System/system/admin/pharmacy_approvals.php" class="text-decoration-none">
+                    <a href="/medi/admin/pharmacy_approvals.php" class="text-decoration-none">
                       <i class="feather icon-clock mr-2 text-warning-500"></i>Pending Registrations
                     </a>
                   </li>

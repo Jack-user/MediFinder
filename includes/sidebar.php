@@ -7,10 +7,10 @@ $role = $_SESSION['user_role'] ?? 'patient';
 <nav class="pc-sidebar">
   <div class="navbar-wrapper">
     <div class="m-header flex items-center py-4 px-6 h-header-height">
-      <a href="/CEMO_System/system/dashboard.php" class="b-brand flex items-center gap-3">
+      <a href="/medi/dashboard.php" class="b-brand flex items-center gap-3">
         <!-- ========   Change your logo from here   ============ -->
-        <img src="/CEMO_System/system/assets/img/medifinder-logo.svg" class="img-fluid logo logo-lg" alt="MediFinder" style="width: 32px; height: 32px;" />
-        <img src="/CEMO_System/system/assets/img/medifinder-logo.svg" class="img-fluid logo logo-sm" alt="MediFinder" style="width: 32px; height: 32px;" />
+        <img src="/medi/assets/img/medifinder-logo.svg" class="img-fluid logo logo-lg" alt="MediFinder" style="width: 32px; height: 32px;" />
+        <img src="/medi/assets/img/medifinder-logo.svg" class="img-fluid logo logo-sm" alt="MediFinder" style="width: 32px; height: 32px;" />
         <span class="font-semibold text-lg">MediFinder</span>
       </a>
     </div>
@@ -22,7 +22,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
         <?php if ($isLoggedIn): ?>
           <?php if ($role === 'pharmacy_owner'): ?>
             <li class="pc-item">
-              <a href="/CEMO_System/system/pharmacy/index.php" class="pc-link">
+              <a href="/medi/pharmacy/index.php" class="pc-link">
                 <span class="pc-micon">
                   <i data-feather="store"></i>
                 </span>
@@ -30,7 +30,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
               </a>
             </li>
             <li class="pc-item">
-              <a href="/CEMO_System/system/pharmacy_inventory.php" class="pc-link">
+              <a href="/medi/pharmacy_inventory.php" class="pc-link">
                 <span class="pc-micon">
                   <i data-feather="package"></i>
                 </span>
@@ -38,7 +38,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
               </a>
             </li>
             <li class="pc-item">
-              <a href="/CEMO_System/system/pharmacy_location.php" class="pc-link">
+              <a href="/medi/pharmacy_location.php" class="pc-link">
                 <span class="pc-micon">
                   <i data-feather="map-pin"></i>
                 </span>
@@ -47,7 +47,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
             </li>
           <?php elseif ($role === 'admin'): ?>
             <li class="pc-item">
-              <a href="/CEMO_System/system/admin/pharmacy_approvals.php" class="pc-link">
+              <a href="/medi/admin/pharmacy_approvals.php" class="pc-link">
                 <span class="pc-micon">
                   <i data-feather="shield"></i>
                 </span>
@@ -55,7 +55,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
               </a>
             </li>
             <li class="pc-item">
-              <a href="/CEMO_System/system/admin/index.php" class="pc-link">
+              <a href="/medi/admin/index.php" class="pc-link">
                 <span class="pc-micon">
                   <i data-feather="home"></i>
                 </span>
@@ -64,7 +64,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
             </li>
           <?php else: ?>
             <li class="pc-item">
-              <a href="/CEMO_System/system/patient/index.php" class="pc-link">
+              <a href="/medi/patient/index.php" class="pc-link">
                 <span class="pc-micon">
                   <i data-feather="home"></i>
                 </span>
@@ -74,7 +74,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
           <?php endif; ?>
         <?php else: ?>
           <li class="pc-item">
-            <a href="/CEMO_System/system/index.php" class="pc-link">
+            <a href="/medi/index.php" class="pc-link">
               <span class="pc-micon">
                 <i data-feather="home"></i>
               </span>
@@ -88,7 +88,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
             <label>Patient Tools</label>
           </li>
           <li class="pc-item">
-            <a href="/CEMO_System/system/prescription.php" class="pc-link">
+            <a href="/medi/prescription.php" class="pc-link">
               <span class="pc-micon">
                 <i data-feather="camera"></i>
               </span>
@@ -96,7 +96,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
             </a>
           </li>
           <li class="pc-item">
-            <a href="/CEMO_System/system/manual.php" class="pc-link">
+            <a href="/medi/manual.php" class="pc-link">
               <span class="pc-micon">
                 <i data-feather="edit"></i>
               </span>
@@ -104,7 +104,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
             </a>
           </li>
           <li class="pc-item">
-            <a href="/CEMO_System/system/locator.php" class="pc-link">
+            <a href="/medi/locator.php" class="pc-link">
               <span class="pc-micon">
                 <i data-feather="map"></i>
               </span>
@@ -112,7 +112,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
             </a>
           </li>
           <li class="pc-item">
-            <a href="/CEMO_System/system/reminders.php" class="pc-link">
+            <a href="/medi/reminders.php" class="pc-link">
               <span class="pc-micon">
                 <i data-feather="bell"></i>
               </span>
@@ -126,7 +126,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
         </li>
         <?php if ($isLoggedIn): ?>
           <li class="pc-item">
-            <a href="/CEMO_System/system/auth/logout.php" class="pc-link text-danger-500">
+            <a href="/medi/auth/logout.php" class="pc-link text-danger-500">
               <span class="pc-micon">
                 <i data-feather="log-out"></i>
               </span>
@@ -135,7 +135,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
           </li>
         <?php else: ?>
           <li class="pc-item">
-            <a href="/CEMO_System/system/auth/login.php" class="pc-link">
+            <a href="/medi/auth/login.php" class="pc-link">
               <span class="pc-micon">
                 <i data-feather="log-in"></i>
               </span>
@@ -143,7 +143,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
             </a>
           </li>
           <li class="pc-item">
-            <a href="/CEMO_System/system/auth/register_pharmacy.php" class="pc-link">
+            <a href="/medi/auth/register_pharmacy.php" class="pc-link">
               <span class="pc-micon">
                 <i data-feather="store"></i>
               </span>

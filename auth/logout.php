@@ -2,7 +2,7 @@
 session_start();
 session_unset();
 session_destroy();
-header('Location: /CEMO_System/system/');
+header('Location: /medi/');
 exit;
 
 

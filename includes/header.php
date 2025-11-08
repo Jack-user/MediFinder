@@ -36,7 +36,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
       </ul>
     </div>
     <!-- [Mobile Media Block end] -->
-    <div class="ms-auto">
+    <!-- <div class="ms-auto">
       <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
         <li class="dropdown pc-h-item">
           <a class="pc-head-link dropdown-toggle me-0" data-pc-toggle="dropdown" href="#" role="button"
@@ -46,7 +46,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
           <div class="dropdown-menu dropdown-menu-end pc-h-dropdown">
             <a href="#!" class="dropdown-item" onclick="layout_change('dark')">
               <i data-feather="moon"></i>
-              <span>Dark</span>
+              <span>Darks</span>
             </a>
             <a href="#!" class="dropdown-item" onclick="layout_change('light')">
               <i data-feather="sun"></i>
@@ -56,7 +56,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
               <i data-feather="settings"></i>
               <span>Default</span>
             </a>
-          </div>
+          </div> -->
         </li>
         <?php if ($isLoggedIn): ?>
         <li class="dropdown pc-h-item">
@@ -96,7 +96,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
             </div>
             <div class="dropdown-body py-4 px-5">
               <div class="profile-notification-scroll position-relative" style="max-height: calc(100vh - 225px)">
-                <a href="/CEMO_System/system/dashboard.php" class="dropdown-item">
+                <a href="/medi/dashboard.php" class="dropdown-item">
                   <span>
                     <svg class="pc-icon text-muted me-2 inline-block">
                       <use xlink:href="#custom-setting-outline"></use>
@@ -104,7 +104,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
                     <span>Dashboard</span>
                   </span>
                 </a>
-                <a href="/CEMO_System/system/auth/logout.php" class="dropdown-item">
+                <a href="/medi/auth/logout.php" class="dropdown-item">
                   <span>
                     <svg class="pc-icon text-muted me-2 inline-block">
                       <use xlink:href="#custom-lock-outline"></use>
@@ -113,7 +113,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
                   </span>
                 </a>
                 <div class="grid my-3">
-                  <a href="/CEMO_System/system/auth/logout.php" class="btn btn-primary flex items-center justify-center">
+                  <a href="/medi/auth/logout.php" class="btn btn-primary flex items-center justify-center">
                     <svg class="pc-icon me-2 w-[22px] h-[22px]">
                       <use xlink:href="#custom-logout-1-outline"></use>
                     </svg>
@@ -126,7 +126,7 @@ $role = $_SESSION['user_role'] ?? 'patient';
         </li>
         <?php else: ?>
         <li class="pc-h-item">
-          <a href="/CEMO_System/system/auth/login.php" class="btn btn-primary btn-sm">Login</a>
+          <a href="/medi/auth/login.php" class="btn btn-primary btn-sm">Login</a>
         </li>
         <?php endif; ?>
       </ul>

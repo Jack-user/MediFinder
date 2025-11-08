@@ -23,11 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Redirect based on role (use session role to ensure consistency)
                 $userRole = $_SESSION['user_role'];
                 if ($userRole === 'pharmacy_owner') {
-                    header('Location: /CEMO_System/system/pharmacy/index.php');
+                    header('Location: /medi/pharmacy/index.php');
                 } elseif ($userRole === 'admin') {
-                    header('Location: /CEMO_System/system/admin/index.php');
+                    header('Location: /medi/admin/index.php');
                 } else {
-                    header('Location: /CEMO_System/system/patient/index.php');
+                    header('Location: /medi/patient/index.php');
                 }
                 exit;
             } else {
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Sign in — MediFinder</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
-    <link href="/CEMO_System/system/assets/css/style.css" rel="stylesheet" />
+    <link href="/medi/assets/css/style.css" rel="stylesheet" />
     <style>
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -410,7 +410,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="floating-pill"></div>
     
     <div class="login-container">
-        <!-- <a href="/CEMO_System/system/" class="back-link">
+        <!-- <a href="/medi/" class="back-link">
             <i class="fas fa-arrow-left"></i>
             Back to Home
         </a> -->
@@ -418,7 +418,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="login-card">
             <div class="text-center">
                 <div class="logo-container">
-                    <img src="/CEMO_System/system/assets/img/medifinder-logo.svg" alt="MediFinder">
+                    <img src="/medi/assets/img/medifinder-logo.svg" alt="MediFinder">
                 </div>
                 <h3>Welcome back</h3>
                 <p class="subtitle">Sign in to continue to MediFinder</p>
@@ -472,7 +472,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 
                 <div class="forgot-password">
-                    <a href="/CEMO_System/system/auth/forgot_password.php">Forgot password?</a>
+                    <a href="/medi/auth/forgot_password.php">Forgot password?</a>
                 </div>
                 
                 <div class="d-grid gap-3 mt-4">
@@ -487,7 +487,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             
             <div class="d-grid">
-                <a class="btn btn-outline-secondary" href="/CEMO_System/system/auth/register.php">
+                <a class="btn btn-outline-secondary" href="/medi/auth/register.php">
                     <i class="fas fa-user-plus me-2"></i>Create New Account
                 </a>
             </div>

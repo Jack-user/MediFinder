@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/includes/db.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /CEMO_System/system/auth/login.php');
+    header('Location: /medi/auth/login.php');
     exit;
 }
 
@@ -13,7 +13,7 @@ $userId = (int)$_SESSION['user_id'];
 $userRole = $_SESSION['user_role'] ?? 'patient';
 
 if ($userRole !== 'pharmacy_owner') {
-    header('Location: /CEMO_System/system/dashboard.php');
+    header('Location: /medi/dashboard.php');
     exit;
 }
 
@@ -33,10 +33,10 @@ if (!$pharmacy) {
     $stmt->close();
     
     if ($pending) {
-        echo '<!DOCTYPE html><html><head><title>Pending Approval</title></head><body><div class="container py-5"><div class="alert alert-warning"><h4>Registration Pending</h4><p>Your pharmacy registration is currently under review. You will be notified once it\'s approved.</p><a href="/CEMO_System/system/auth/logout.php" class="btn btn-primary">Logout</a></div></div></body></html>';
+        echo '<!DOCTYPE html><html><head><title>Pending Approval</title></head><body><div class="container py-5"><div class="alert alert-warning"><h4>Registration Pending</h4><p>Your pharmacy registration is currently under review. You will be notified once it\'s approved.</p><a href="/medi/auth/logout.php" class="btn btn-primary">Logout</a></div></div></body></html>';
         exit;
     } else {
-        header('Location: /CEMO_System/system/auth/register_pharmacy.php');
+        header('Location: /medi/auth/register_pharmacy.php');
         exit;
     }
 }
@@ -71,7 +71,7 @@ $stmt->close();
     <meta name="author" content="MediFinder" />
 
     <!-- [Favicon] icon -->
-    <link rel="icon" href="/CEMO_System/system/assets/img/medifinder-logo.svg" type="image/x-icon" />
+    <link rel="icon" href="/medi/assets/img/medifinder-logo.svg" type="image/x-icon" />
 
     <?php include 'includes/head-css.php'; ?>
   </head>
@@ -104,7 +104,7 @@ $stmt->close();
                     <h2 class="mb-1"><?php echo htmlspecialchars($pharmacy['name']); ?></h2>
                     <p class="text-muted mb-0"><?php echo htmlspecialchars($pharmacy['address']); ?></p>
                   </div>
-                  <a href="/CEMO_System/system/pharmacy_inventory.php" class="btn btn-primary">
+                  <a href="/medi/pharmacy_inventory.php" class="btn btn-primary">
                     <i class="feather icon-plus mr-2"></i>Manage Inventory
                   </a>
                 </div>
@@ -167,13 +167,13 @@ $stmt->close();
               </div>
               <div class="card-body">
                 <div class="grid grid-cols-2 gap-3">
-                  <a href="/CEMO_System/system/pharmacy_inventory.php" class="card text-decoration-none border-primary hover:border-primary-600 transition-colors">
+                  <a href="/medi/pharmacy_inventory.php" class="card text-decoration-none border-primary hover:border-primary-600 transition-colors">
                     <div class="card-body text-center">
                       <i class="feather icon-package text-primary-500 text-[32px] mb-2"></i>
                       <h6 class="mb-0">Inventory</h6>
                     </div>
                   </a>
-                  <a href="/CEMO_System/system/pharmacy_location.php" class="card text-decoration-none border-info hover:border-info-600 transition-colors">
+                  <a href="/medi/pharmacy_location.php" class="card text-decoration-none border-info hover:border-info-600 transition-colors">
                     <div class="card-body text-center">
                       <i class="feather icon-map-pin text-info-500 text-[32px] mb-2"></i>
                       <h6 class="mb-0">Update Location</h6>
@@ -209,7 +209,7 @@ $stmt->close();
                               </div>
                             </td>
                             <td class="text-end">
-                              <a href="/CEMO_System/system/pharmacy_inventory.php?edit=<?php echo $item['id']; ?>" class="btn btn-sm btn-warning">
+                              <a href="/medi/pharmacy_inventory.php?edit=<?php echo $item['id']; ?>" class="btn btn-sm btn-warning">
                                 <i class="feather icon-edit mr-1"></i>Update
                               </a>
                             </td>

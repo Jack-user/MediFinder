@@ -3,7 +3,7 @@
 require_once __DIR__ . '/includes/db.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /CEMO_System/system/auth/login.php');
+    header('Location: auth/login.php');
     exit;
 }
 
@@ -77,7 +77,7 @@ $stmt->close();
     <meta name="author" content="MediFinder" />
 
     <!-- [Favicon] icon -->
-    <link rel="icon" href="/CEMO_System/system/assets/img/medifinder-logo.svg" type="image/x-icon" />
+    <link rel="icon" href="assets/img/medifinder-logo.svg" type="image/x-icon" />
 
     <?php include 'includes/head-css.php'; ?>
 </head>
@@ -165,14 +165,14 @@ $stmt->close();
                 <h5 class="mb-0">
                   <i class="feather icon-clock mr-2 text-primary-500"></i>Recent Prescriptions
                 </h5>
-                        <a href="/CEMO_System/system/prescription.php" class="btn btn-sm btn-outline-primary">Upload New</a>
+                        <a href="prescription.php" class="btn btn-sm btn-outline-primary">Upload New</a>
                     </div>
                     <div class="card-body">
                         <?php if (empty($recentUploads)): ?>
                   <div class="text-center py-4 text-muted">
                     <i class="feather icon-file-text text-[48px] mb-3 opacity-25"></i>
                                 <p class="mb-0">No prescriptions uploaded yet</p>
-                                <a href="/CEMO_System/system/prescription.php" class="btn btn-sm btn-primary mt-3">Upload Your First</a>
+                                <a href="prescription.php" class="btn btn-sm btn-primary mt-3">Upload Your First</a>
                             </div>
                         <?php else: ?>
                   <div class="table-responsive">
@@ -215,14 +215,14 @@ $stmt->close();
                 <h5 class="mb-0">
                   <i class="feather icon-bell mr-2 text-warning-500"></i>Upcoming Reminders
                 </h5>
-                        <a href="/CEMO_System/system/reminders.php" class="btn btn-sm btn-outline-warning">Manage</a>
+                        <a href="reminders.php" class="btn btn-sm btn-outline-warning">Manage</a>
                     </div>
                     <div class="card-body">
                         <?php if (empty($upcomingReminders)): ?>
                   <div class="text-center py-4 text-muted">
                     <i class="feather icon-bell-off text-[48px] mb-3 opacity-25"></i>
                                 <p class="mb-0">No upcoming reminders</p>
-                                <a href="/CEMO_System/system/reminders.php" class="btn btn-sm btn-warning mt-3">Set Reminder</a>
+                                <a href="reminders.php" class="btn btn-sm btn-warning mt-3">Set Reminder</a>
                             </div>
                         <?php else: ?>
                   <div class="table-responsive">
