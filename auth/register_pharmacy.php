@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register Pharmacy — MediFinder</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/medi/assets/css/style.css" rel="stylesheet" />
+    <link href="/CEMO_System/system/assets/css/style.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <style>
@@ -460,7 +460,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="container py-4">
-        <a href="/medi/" class="back-link">
+        <a href="/medi/auth/register.php" class="back-link">
             <i class="fas fa-arrow-left"></i>
             Back to Home
         </a>
@@ -491,11 +491,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="progress-steps">
                                 <div class="progress-step">
                                     <div class="step-circle active">1</div>
-                                    <div class="step-label">Account</div>
+                                    <div class="step-label">Pharmacy Info</div>
                                 </div>
                                 <div class="progress-step">
                                     <div class="step-circle active">2</div>
-                                    <div class="step-label">Pharmacy Info</div>
+                                    <div class="step-label">Account</div>
                                 </div>
                                 <div class="progress-step">
                                     <div class="step-circle active">3</div>
@@ -520,33 +520,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php endif; ?>
                             
                             <form method="post" enctype="multipart/form-data" id="registrationForm">
-                                <!-- Account Information Section -->
-                                <div class="section-header">
-                                    <div class="section-icon">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    <h5>Account Information</h5>
-                                </div>
-                                
-                                <div class="row g-3 mb-5">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Full Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="name" placeholder="John Doe" required value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Email Address <span class="text-danger">*</span></label>
-                                        <input type="email" class="form-control" name="email" placeholder="pharmacy@example.com" required value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Password <span class="text-danger">*</span></label>
-                                        <input type="password" class="form-control" name="password" placeholder="Minimum 6 characters" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
-                                        <input type="password" class="form-control" name="confirm" placeholder="Re-enter password" required>
-                                    </div>
-                                </div>
-                                
                                 <!-- Pharmacy Information Section -->
                                 <div class="section-header">
                                     <div class="section-icon">
@@ -600,7 +573,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         <div class="col-md-6">
                                                             <div class="d-grid gap-2 mb-3">
                                                                 <button type="button" class="btn btn-primary" id="btnExtractOCR">
-                                                                    <i class="fas fa-magic me-2"></i>Extract Text with OCR
+                                                                    <i class="fas fa-magic me-2"></i>Extract Text (Browser)
+                                                                </button>
+                                                                <button type="button" class="btn btn-secondary" id="btnExtractEnhanced">
+                                                                    <i class="fas fa-rocket me-2"></i>Enhanced OCR (Server)
                                                                 </button>
                                                                 <button type="button" class="btn btn-outline-secondary" id="btnClearOCR" style="display: none;">
                                                                     <i class="fas fa-times me-2"></i>Clear Extraction
@@ -629,6 +605,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </div>
                                 </div>
                                 
+                                <!-- Account Information Section -->
+                                <div class="section-header">
+                                    <div class="section-icon">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <h5>Account Information</h5>
+                                </div>
+                                
+                                <div class="row g-3 mb-5">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="name" placeholder="John Doe" required value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" name="email" placeholder="pharmacy@example.com" required value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Password <span class="text-danger">*</span></label>
+                                        <input type="password" class="form-control" name="password" placeholder="Minimum 6 characters" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                                        <input type="password" class="form-control" name="confirm" placeholder="Re-enter password" required>
+                                    </div>
+                                </div>
+                                
                                 <!-- Location Section -->
                                 <div class="section-header">
                                     <div class="section-icon">
@@ -653,7 +656,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <input type="hidden" name="longitude" id="longitude" required>
                                     <small class="text-muted mt-2 d-block">
                                         <i class="fas fa-info-circle"></i> Current coordinates: 
-                                        <span id="coordDisplay" class="fw-semibold">Click on map to set location</span>
+                                        <span id="coordDisplay" class="fw-semibold d-block d-sm-inline">Click on map to set location</span>
+                                        <span id="addressDisplay" class="d-block mt-1">
+                                            <i class="fas fa-map-marker-alt"></i> Address auto-fill will appear after selecting a location.
+                                        </span>
                                     </small>
                                 </div>
                                 
@@ -692,22 +698,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     map.options.maxBoundsViscosity = 1.0;
     
     let marker = null;
+
+    const addressField = document.querySelector('textarea[name="address"]');
+    const coordDisplay = document.getElementById('coordDisplay');
+    const addressDisplay = document.getElementById('addressDisplay');
+    const addressDisplayDefault = '<i class="fas fa-map-marker-alt me-1"></i>Address auto-fill will appear after selecting a location.';
+    const latInput = document.getElementById('latitude');
+    const lonInput = document.getElementById('longitude');
+
+    if (addressDisplay) {
+        if (addressField && addressField.value.trim()) {
+            addressDisplay.innerHTML = `<i class="fas fa-map-marker-alt me-1"></i>${addressField.value.trim()}`;
+        } else {
+            addressDisplay.innerHTML = addressDisplayDefault;
+        }
+    }
+
+    if (addressField) {
+        addressField.dataset.autofilled = addressField.dataset.autofilled || 'false';
+        addressField.addEventListener('input', () => {
+            addressField.dataset.autofilled = 'false';
+            if (addressDisplay) {
+                if (addressField.value.trim()) {
+                    addressDisplay.innerHTML = `<i class="fas fa-edit me-1"></i>${addressField.value.trim()}`;
+                } else {
+                    addressDisplay.innerHTML = addressDisplayDefault;
+                }
+            }
+        });
+    }
     
     // Set initial location if provided
     const initLat = <?php echo json_encode($_POST['latitude'] ?? null); ?>;
     const initLon = <?php echo json_encode($_POST['longitude'] ?? null); ?>;
-    if (initLat && initLon) {
-        marker = L.marker([initLat, initLon], {
+    const initLatNum = parseFloat(initLat);
+    const initLonNum = parseFloat(initLon);
+    if (!Number.isNaN(initLatNum) && !Number.isNaN(initLonNum)) {
+        marker = L.marker([initLatNum, initLonNum], {
             icon: L.icon({
                 iconUrl: 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/images/marker-icon.png',
                 iconSize: [25, 41],
                 iconAnchor: [12, 41]
             })
         }).addTo(map);
-        map.setView([initLat, initLon], 16);
-        document.getElementById('latitude').value = initLat;
-        document.getElementById('longitude').value = initLon;
-        document.getElementById('coordDisplay').textContent = `${initLat.toFixed(6)}, ${initLon.toFixed(6)}`;
+        map.setView([initLatNum, initLonNum], 16);
+        if (latInput) latInput.value = initLatNum;
+        if (lonInput) lonInput.value = initLonNum;
+        if (coordDisplay) coordDisplay.textContent = `${initLatNum.toFixed(6)}, ${initLonNum.toFixed(6)}`;
+        reverseGeocode(initLatNum, initLonNum);
     }
     
     // Custom marker icon
@@ -731,11 +769,94 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         marker = L.marker([lat, lon], { icon: customIcon }).addTo(map);
         marker.bindPopup('<strong>Your Pharmacy Location</strong>').openPopup();
         
-        document.getElementById('latitude').value = lat;
-        document.getElementById('longitude').value = lon;
-        document.getElementById('coordDisplay').textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+        if (latInput) latInput.value = lat;
+        if (lonInput) lonInput.value = lon;
+        if (coordDisplay) coordDisplay.textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+        reverseGeocode(lat, lon);
     });
     
+    async function reverseGeocode(lat, lon) {
+        const latNum = parseFloat(lat);
+        const lonNum = parseFloat(lon);
+        if (Number.isNaN(latNum) || Number.isNaN(lonNum)) {
+            return;
+        }
+
+        if (addressDisplay) {
+            addressDisplay.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Fetching address...';
+        }
+
+        try {
+            const response = await fetch(`/CEMO_System/system/api/reverse_geocode.php?lat=${encodeURIComponent(latNum)}&lon=${encodeURIComponent(lonNum)}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch address');
+            }
+            const data = await response.json();
+            if (!data || !data.address) {
+                throw new Error('No address data');
+            }
+
+            const {
+                house_number,
+                road,
+                street,
+                neighbourhood,
+                suburb,
+                barangay,
+                village,
+                town,
+                city,
+                municipality,
+                city_district,
+                state,
+                province,
+                county,
+                postcode
+            } = data.address;
+
+            const streetPart = [house_number, road || street].filter(Boolean).join(' ').trim();
+            const barangayPart = barangay || village || suburb || neighbourhood || '';
+            const cityPart = city || town || municipality || city_district || '';
+            const provincePart = province || state || county || '';
+
+            const parts = [streetPart, barangayPart, cityPart, provincePart, postcode].filter(part => part && part.length);
+            let formattedAddress = parts.join(', ');
+
+            if ((!formattedAddress || formattedAddress.length < 5) && typeof data.display_name === 'string') {
+                formattedAddress = data.display_name.trim();
+            }
+
+            if (!formattedAddress || formattedAddress.length < 5) {
+                if (addressDisplay) {
+                    addressDisplay.innerHTML = '<i class="fas fa-info-circle me-1"></i>Address not found for this point. Please enter it manually.';
+                }
+                return;
+            }
+
+            let shouldAutofill = true;
+            if (addressField) {
+                shouldAutofill = !addressField.value.trim() || addressField.dataset.autofilled === 'true';
+                if (shouldAutofill) {
+                    addressField.value = formattedAddress;
+                    addressField.dataset.autofilled = 'true';
+                    addressField.classList.add('is-valid');
+                }
+            }
+
+            if (addressDisplay) {
+                if (shouldAutofill) {
+                    addressDisplay.innerHTML = `<i class="fas fa-map-marker-alt me-1"></i>${formattedAddress}`;
+                } else {
+                    addressDisplay.innerHTML = `<i class="fas fa-map-marker-alt me-1"></i>${formattedAddress} <span class="text-muted">(suggested)</span>`;
+                }
+            }
+        } catch (error) {
+            if (addressDisplay) {
+                addressDisplay.innerHTML = '<i class="fas fa-info-circle me-1"></i>Unable to auto-detect address. Please enter manually.';
+            }
+        }
+    }
+
     // Use geolocation
     navigator.geolocation.getCurrentPosition((pos) => {
         const { latitude, longitude } = pos.coords;
@@ -782,6 +903,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     const licensePreview = document.getElementById('licensePreview');
     const licenseImagePreview = document.getElementById('licenseImagePreview');
     const btnExtractOCR = document.getElementById('btnExtractOCR');
+    const btnExtractEnhanced = document.getElementById('btnExtractEnhanced');
     const btnClearOCR = document.getElementById('btnClearOCR');
     const ocrStatus = document.getElementById('ocrStatus');
     const ocrStatusText = document.getElementById('ocrStatusText');
@@ -789,6 +911,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     const ocrText = document.getElementById('ocrText');
     
     let currentImageData = null;
+
+    function clearOcrExtras() {
+        if (!ocrStatus) {
+            return;
+        }
+        const extras = ocrStatus.querySelectorAll('.ocr-extra');
+        extras.forEach((node) => node.remove());
+    }
     
     fileInput.addEventListener('change', function() {
         if (this.files.length > 0) {
