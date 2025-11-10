@@ -43,7 +43,10 @@ session_start();
           <div class="col-span-12 xl:col-span-6">
             <div class="card">
               <div class="card-header">
-                <h5>1) Upload prescription image</h5>
+                <h5 class="d-flex align-items-center gap-2 mb-0">
+                  <i class="feather icon-upload-cloud text-primary"></i>
+                  <span>1) Upload prescription image</span>
+                </h5>
               </div>
               <div class="card-body">
                 <p class="text-muted small mb-3">OCR is processed in your browser for privacy.</p>

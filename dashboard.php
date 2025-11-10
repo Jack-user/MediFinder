@@ -104,59 +104,58 @@ $stmt->close();
         <!-- Welcome Section -->
           <div class="col-span-12 mb-4">
             <div class="card">
-              <div class="card-body">
-                <h2 class="mb-2">Welcome back, <?php echo htmlspecialchars($userName); ?>!</h2>
-                <p class="text-muted mb-0">Here's your health and medicine overview</p>
-                    </div>
+              <div class="card-body d-flex align-items-center gap-3">
+                <div class="icon-wrapper bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center" style="width:52px; height:52px;">
+                  <i class="feather icon-smile text-[24px]"></i>
+                </div>
+                <div>
+                  <h2 class="mb-1">Welcome back, <?php echo htmlspecialchars($userName); ?>!</h2>
+                  <p class="text-muted mb-0">Here’s your health and medicine overview</p>
+                </div>
+              </div>
             </div>
-            </div>
+          </div>
 
         <!-- Statistics Cards -->
           <div class="col-span-12 xl:col-span-4 md:col-span-6">
             <div class="card">
-              <div class="card-header !pb-0 !border-b-0">
-                <h5>Prescriptions Uploaded</h5>
+              <div class="card-body d-flex align-items-center gap-3">
+                <div class="icon-wrapper bg-primary-subtle text-primary rounded-3 d-flex align-items-center justify-content-center" style="width:48px; height:48px;">
+                  <i class="feather icon-file-text"></i>
+                </div>
+                <div>
+                  <p class="text-muted mb-1 text-uppercase small">Prescriptions Uploaded</p>
+                  <h3 class="mb-0"><?php echo $stats['total_uploads']; ?></h3>
+                </div>
               </div>
-                    <div class="card-body">
-                <div class="flex items-center justify-between gap-3 flex-wrap">
-                  <h3 class="font-light flex items-center mb-0">
-                    <i class="feather icon-file-text text-primary-500 text-[30px] mr-1.5"></i>
-                    <?php echo $stats['total_uploads']; ?>
-                  </h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>
+          </div>
           <div class="col-span-12 xl:col-span-4 md:col-span-6">
             <div class="card">
-              <div class="card-header !pb-0 !border-b-0">
-                <h5>Total Reminders</h5>
-            </div>
-                    <div class="card-body">
-                <div class="flex items-center justify-between gap-3 flex-wrap">
-                  <h3 class="font-light flex items-center mb-0">
-                    <i class="feather icon-bell text-warning-500 text-[30px] mr-1.5"></i>
-                    <?php echo $stats['total_reminders']; ?>
-                  </h3>
-                            </div>
-                        </div>
-                    </div>
+              <div class="card-body d-flex align-items-center gap-3">
+                <div class="icon-wrapper bg-warning-subtle text-warning rounded-3 d-flex align-items-center justify-content-center" style="width:48px; height:48px;">
+                  <i class="feather icon-bell"></i>
                 </div>
+                <div>
+                  <p class="text-muted mb-1 text-uppercase small">Total Reminders</p>
+                  <h3 class="mb-0"><?php echo $stats['total_reminders']; ?></h3>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="col-span-12 xl:col-span-4 md:col-span-6">
             <div class="card">
-              <div class="card-header !pb-0 !border-b-0">
-                <h5>Upcoming (7 days)</h5>
-            </div>
-                    <div class="card-body">
-                <div class="flex items-center justify-between gap-3 flex-wrap">
-                  <h3 class="font-light flex items-center mb-0">
-                    <i class="feather icon-calendar text-success-500 text-[30px] mr-1.5"></i>
-                    <?php echo $stats['upcoming_reminders']; ?>
-                  </h3>
-                    </div>
+              <div class="card-body d-flex align-items-center gap-3">
+                <div class="icon-wrapper bg-success-subtle text-success rounded-3 d-flex align-items-center justify-content-center" style="width:48px; height:48px;">
+                  <i class="feather icon-calendar"></i>
                 </div>
+                <div>
+                  <p class="text-muted mb-1 text-uppercase small">Upcoming (7 days)</p>
+                  <h3 class="mb-0"><?php echo $stats['upcoming_reminders']; ?></h3>
+                </div>
+              </div>
             </div>
-        </div>
+          </div>
 
             <!-- Recent Prescriptions -->
           <div class="col-span-12 xl:col-span-6">
