@@ -22,28 +22,51 @@ function navActive(string $path, string $currentPath): string {
     align-items: center;
     padding: 24px 18px 16px;
     border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+    justify-content: flex-start;
+  }
+  .pc-sidebar.white-theme .sidebar-brand a {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .pc-sidebar.white-theme .sidebar-brand .sidebar-logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    flex-shrink: 0;
+    margin-right: 0;
+    padding: 0;
   }
   .pc-sidebar.white-theme .sidebar-brand .sidebar-title {
     font-weight: 600;
     font-size: 1.15rem;
     color: #0f172a;
+    text-align: left;
+    margin: 0;
   }
   .pc-sidebar.white-theme .pc-navbar {
-    padding: 18px 18px 32px;
+    padding: 18px 12px 32px;
+    text-align: left;
   }
   .pc-sidebar.white-theme .pc-item {
     margin-bottom: 6px;
+    text-align: left;
+    padding-left: 0;
   }
   .pc-sidebar.white-theme .pc-link {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
+    gap: 0;
+    padding: 12px 8px 12px 12px;
     border-radius: 12px;
     color: #0f172a;
     font-weight: 500;
     transition: background 0.2s ease, color 0.2s ease;
     justify-content: flex-start;
+    text-align: left;
+    margin-left: 0;
   }
   .pc-sidebar.white-theme .pc-link:hover {
     background: rgba(13, 110, 253, 0.08);
@@ -61,6 +84,11 @@ function navActive(string $path, string $currentPath): string {
     align-items: center;
     justify-content: center;
     color: inherit;
+    flex-shrink: 0;
+  }
+  .pc-sidebar.white-theme .pc-mtext {
+    text-align: left;
+    flex: 1;
   }
   .pc-sidebar.white-theme .pc-caption label {
     font-size: 0.72rem;
@@ -69,6 +97,8 @@ function navActive(string $path, string $currentPath): string {
     color: #94a3b8;
     margin: 16px 0 8px;
     display: inline-block;
+    text-align: left;
+    width: 100%;
   }
 </style>
 <!-- [ Sidebar Menu ] start -->
@@ -127,6 +157,33 @@ function navActive(string $path, string $currentPath): string {
                 <span class="pc-mtext">Dashboard</span>
               </a>
             </li>
+            <li class="pc-item">
+              <a href="/medi/admin/latest_registrations.php" class="pc-link<?php echo navActive('/medi/admin/latest_registrations.php', $currentPath); ?>">
+                <span class="pc-micon">
+                  <i class="feather icon-list"></i>
+                </span>
+                <span class="pc-mtext">Latest Registrations</span>
+              </a>
+            </li>
+            <li class="pc-item">
+              <a href="/medi/admin/management.php" class="pc-link<?php echo navActive('/medi/admin/management.php', $currentPath); ?>">
+                <span class="pc-micon">
+                  <i class="feather icon-settings"></i>
+                </span>
+                <span class="pc-mtext">Management</span>
+              </a>
+            </li>
+            <li class="pc-item pc-caption">
+              <label>Reports</label>
+            </li>
+            <li class="pc-item">
+              <a href="/medi/admin/reports.php" class="pc-link<?php echo navActive('/medi/admin/reports.php', $currentPath); ?>">
+                <span class="pc-micon">
+                  <i class="feather icon-bar-chart-2"></i>
+                </span>
+                <span class="pc-mtext">Reports</span>
+              </a>
+            </li>
           <?php else: ?>
             <li class="pc-item">
               <a href="/medi/patient/index.php" class="pc-link<?php echo navActive('/medi/patient/index.php', $currentPath); ?>">
@@ -182,37 +239,6 @@ function navActive(string $path, string $currentPath): string {
                 <i class="feather icon-bell"></i>
               </span>
               <span class="pc-mtext">Reminders</span>
-            </a>
-          </li>
-        <?php endif; ?>
-        
-        <li class="pc-item pc-caption">
-          <label>Account</label>
-        </li>
-        <?php if ($isLoggedIn): ?>
-          <li class="pc-item">
-            <a href="/medi/auth/logout.php" class="pc-link text-danger-500">
-              <span class="pc-micon">
-                <i class="feather icon-log-out"></i>
-              </span>
-              <span class="pc-mtext">Logout</span>
-            </a>
-          </li>
-        <?php else: ?>
-          <li class="pc-item">
-            <a href="/medi/auth/login.php" class="pc-link<?php echo navActive('/medi/auth/login.php', $currentPath); ?>">
-              <span class="pc-micon">
-                <i class="feather icon-log-in"></i>
-              </span>
-              <span class="pc-mtext">Login</span>
-            </a>
-          </li>
-          <li class="pc-item">
-            <a href="/medi/auth/register_pharmacy.php" class="pc-link<?php echo navActive('/medi/auth/register_pharmacy.php', $currentPath); ?>">
-              <span class="pc-micon">
-                <i class="feather icon-briefcase"></i>
-              </span>
-              <span class="pc-mtext">Register Pharmacy</span>
             </a>
           </li>
         <?php endif; ?>

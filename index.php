@@ -64,7 +64,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
         
         /* Hero Section */
         .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
             min-height: 90vh;
             display: flex;
             align-items: center;
@@ -255,7 +255,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
         
         /* Stats Counter */
         .stats-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
             padding: 80px 0;
             color: white;
         }
@@ -365,7 +365,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
                         <li class="nav-item"><a class="nav-link fw-semibold" href="/medi/reminders.php">Reminders</a></li>
                         <li class="nav-item"><a class="btn btn-outline-danger ms-lg-3 rounded-pill" href="/medi/auth/logout.php">Logout</a></li>
                     <?php else: ?>
-                        <li class="nav-item"><a class="btn btn-primary ms-lg-3 rounded-pill px-4" href="/medi/auth/login.php">Login</a></li>
+                        <li class="nav-item"><button type="button" class="btn btn-primary ms-lg-3 rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button></li>
                     <?php endif; ?>
                 </ul>
             </div>
@@ -387,9 +387,9 @@ $isLoggedIn = isset($_SESSION['user_id']);
                     <h1 class="display-4 mb-4">Find the Right Medicine Fast & Safely</h1>
                     <p class="mb-4">MediFinder uses advanced AI to analyze prescriptions, recommend safe alternatives, and locate nearby pharmacies with likely stock availability.</p>
                     <div class="d-flex gap-3 flex-wrap">
-                        <a href="/medi/auth/login.php" class="btn btn-light btn-hero">
+                        <button type="button" class="btn btn-light btn-hero" data-bs-toggle="modal" data-bs-target="#loginModal">
                             <i class="fa-solid fa-camera me-2"></i>Get Started Free
-                        </a>
+                        </button>
                         <a href="#features" class="btn btn-outline-light btn-hero">
                             <i class="fa-solid fa-circle-info me-2"></i>Learn More
                         </a>
@@ -407,7 +407,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
                     </div>
                 </div>
                 <div class="col-lg-6 text-center mt-5 mt-lg-0">
-                    <img src="/medi/assets/img/hero-medicine.svg" class="img-fluid hero-illustration" alt="Medicine Illustration" style="max-width: 500px;">
+                    <img src="/medi/assets/img/hero-medicine.svg?v=<?php echo time(); ?>" class="img-fluid hero-illustration" alt="Medicine Illustration" style="max-width: 500px;">
                 </div>
             </div>
         </div>
@@ -544,9 +544,9 @@ $isLoggedIn = isset($_SESSION['user_id']);
                             <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Multi-device sync</li>
                         </ul>
                         <?php if (!$isLoggedIn): ?>
-                            <a href="/medi/auth/register.php" class="btn btn-success btn-lg rounded-pill px-5">
+                            <button type="button" class="btn btn-success btn-lg rounded-pill px-5" data-bs-toggle="modal" data-bs-target="#registerModal">
                                 <i class="fa-solid fa-user-plus me-2"></i>Create Free Account
-                            </a>
+                            </button>
                         <?php else: ?>
                             <a href="/medi/prescription.php" class="btn btn-success btn-lg rounded-pill px-5">
                                 <i class="fa-solid fa-arrow-right me-2"></i>Continue to Dashboard
@@ -579,8 +579,8 @@ $isLoggedIn = isset($_SESSION['user_id']);
                 <div class="col-md-2">
                     <h6 class="fw-bold mb-3">Account</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="/medi/auth/login.php">Login</a></li>
-                        <li class="mb-2"><a href="/medi/auth/register.php">Register</a></li>
+                        <li class="mb-2"><a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+                        <li class="mb-2"><a href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Register</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
@@ -674,5 +674,295 @@ $isLoggedIn = isset($_SESSION['user_id']);
             }
         });
     </script>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="border-radius: 30px; border: none; overflow: hidden;">
+                <div class="modal-header" style="background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%); color: white; border: none; padding: 30px 40px;">
+                    <div class="text-center w-100">
+                        <div class="mb-3">
+                            <img src="/medi/assets/img/medifinder-logo.svg" alt="MediFinder" width="60" height="60" style="background: white; padding: 10px; border-radius: 15px;">
+                        </div>
+                        <h3 class="modal-title fw-bold mb-2" id="loginModalLabel">Welcome back</h3>
+                        <p class="mb-0" style="opacity: 0.95;">Sign in to continue to MediFinder</p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 20px; right: 20px;"></button>
+                </div>
+                <div class="modal-body" style="padding: 40px;">
+                    <div id="loginFormErrors" class="alert alert-danger d-none" role="alert"></div>
+                    <form id="loginForm" method="post" action="/medi/auth/login.php">
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Email Address</label>
+                            <div class="position-relative">
+                                <i class="fas fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; z-index: 10;"></i>
+                                <input type="email" class="form-control form-control-lg" name="email" placeholder="your@email.com" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px 12px 45px;">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Password</label>
+                            <div class="position-relative">
+                                <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; z-index: 10;"></i>
+                                <input type="password" class="form-control form-control-lg" name="password" id="loginPassword" placeholder="Enter your password" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 45px 12px 45px;">
+                                <button type="button" class="btn btn-link p-0" onclick="toggleLoginPassword()" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; z-index: 10; text-decoration: none;">
+                                    <i class="fas fa-eye" id="loginToggleIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mb-4 text-end">
+                            <a href="/medi/auth/forgot_password.php" class="text-decoration-none" style="color: #0d6efd; font-size: 0.9rem;">Forgot password?</a>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg" style="border-radius: 14px; padding: 15px; font-weight: 600;">
+                                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                            </button>
+                        </div>
+                    </form>
+                    <div class="divider text-center my-4" style="position: relative;">
+                        <span style="background: white; padding: 0 15px; position: relative; z-index: 1; color: #94a3b8;">OR</span>
+                        <hr style="position: absolute; top: 50%; left: 0; right: 0; margin: 0; border-color: #e2e8f0;">
+                    </div>
+                    <div class="d-grid">
+                        <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal" style="border-radius: 14px; padding: 14px; font-weight: 600;">
+                            <i class="fas fa-user-plus me-2"></i>Create New Account
+                        </button>
+                    </div>
+                    <div class="mt-4 pt-4 border-top">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <i class="fas fa-shield-halved text-success mb-2"></i>
+                                <div style="font-size: 0.85rem; color: #64748b;">Secure Login</div>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-lock text-success mb-2"></i>
+                                <div style="font-size: 0.85rem; color: #64748b;">Encrypted Data</div>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-user-shield text-success mb-2"></i>
+                                <div style="font-size: 0.85rem; color: #64748b;">Privacy Protected</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="border-radius: 30px; border: none; overflow: hidden;">
+                <div class="modal-header" style="background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%); color: white; border: none; padding: 30px 40px;">
+                    <div class="text-center w-100">
+                        <div class="mb-3">
+                            <img src="/medi/assets/img/medifinder-logo.svg" alt="MediFinder" width="60" height="60" style="background: white; padding: 10px; border-radius: 15px;">
+                        </div>
+                        <h3 class="modal-title fw-bold mb-2" id="registerModalLabel">Create Your MediFinder Account</h3>
+                        <p class="mb-0" style="opacity: 0.95;">Manage reminders, save favorite pharmacies, and get personalized medicine alerts.</p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 20px; right: 20px;"></button>
+                </div>
+                <div class="modal-body" style="padding: 40px;">
+                    <div id="registerFormErrors" class="alert alert-danger d-none" role="alert"></div>
+                    <form id="registerForm" method="post" action="/medi/auth/register.php">
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-lg" name="name" placeholder="e.g., Jane Dela Cruz" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px;">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control form-control-lg" name="email" placeholder="you@example.com" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px;">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Account Type <span class="text-danger">*</span></label>
+                            <select class="form-select form-select-lg" name="role" id="roleSelect" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px;">
+                                <option value="patient">Client — find medicines & set reminders</option>
+                                <option value="pharmacy_owner">Pharmacy Owner — list your pharmacy</option>
+                            </select>
+                            <small class="text-muted d-block mt-2">Need an admin account? Contact support.</small>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control form-control-lg" name="password" placeholder="Minimum 6 characters" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px;">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Confirm Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control form-control-lg" name="confirm" placeholder="Re-type password" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px;">
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg" style="border-radius: 14px; padding: 15px; font-weight: 600;">
+                                <i class="fas fa-paper-plane me-2"></i>Create Account
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-lg" onclick="switchToLoginModal()" style="border-radius: 14px; padding: 14px; font-weight: 600;">
+                                <i class="fas fa-sign-in-alt me-2"></i>Already registered? Sign in
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle registration form submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+            const errorsDiv = document.getElementById('registerFormErrors');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+            
+            errorsDiv.classList.add('d-none');
+            errorsDiv.innerHTML = '';
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creating Account...';
+
+            fetch('/medi/auth/register.php', {
+                method: 'POST',
+                body: formData,
+                redirect: 'follow'
+            })
+            .then(response => {
+                if (response.redirected) {
+                    // Success - redirect to the new page
+                    window.location.href = response.url;
+                    return;
+                }
+                return response.text();
+            })
+            .then(html => {
+                if (html) {
+                    // Parse the response to check for errors
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const errorAlert = doc.querySelector('.alert-danger');
+                    
+                    if (errorAlert) {
+                        // Show errors in modal
+                        errorsDiv.innerHTML = errorAlert.innerHTML;
+                        errorsDiv.classList.remove('d-none');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
+                        // Scroll to errors
+                        errorsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    } else {
+                        // No errors found, might be success - reload page
+                        window.location.reload();
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                errorsDiv.innerHTML = '<strong>Error:</strong> Something went wrong. Please try again.';
+                errorsDiv.classList.remove('d-none');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            });
+        });
+
+        // Handle role selection change
+        document.getElementById('roleSelect').addEventListener('change', function() {
+            if (this.value === 'pharmacy_owner') {
+                // Close modal and redirect to pharmacy registration
+                const modal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                if (modal) {
+                    modal.hide();
+                }
+                window.location.href = '/medi/auth/register_pharmacy.php';
+            }
+        });
+
+        // Switch from registration modal to login modal
+        function switchToLoginModal() {
+            const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+            if (registerModal) {
+                registerModal.hide();
+            }
+            setTimeout(() => {
+                const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                loginModal.show();
+            }, 300);
+        }
+
+        // Toggle password visibility for login
+        function toggleLoginPassword() {
+            const passwordInput = document.getElementById('loginPassword');
+            const toggleIcon = document.getElementById('loginToggleIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+            const errorsDiv = document.getElementById('loginFormErrors');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+            
+            errorsDiv.classList.add('d-none');
+            errorsDiv.innerHTML = '';
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Signing In...';
+
+            fetch('/medi/auth/login.php', {
+                method: 'POST',
+                body: formData,
+                redirect: 'follow'
+            })
+            .then(response => {
+                if (response.redirected) {
+                    // Success - redirect to the new page
+                    window.location.href = response.url;
+                    return;
+                }
+                return response.text();
+            })
+            .then(html => {
+                if (html) {
+                    // Parse the response to check for errors
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const errorAlert = doc.querySelector('.alert-danger');
+                    
+                    if (errorAlert) {
+                        // Show errors in modal
+                        const errorText = errorAlert.textContent || errorAlert.innerText;
+                        errorsDiv.innerHTML = '<div class="d-flex align-items-start"><i class="fas fa-exclamation-circle me-2 mt-1"></i><div>' + errorText + '</div></div>';
+                        errorsDiv.classList.remove('d-none');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
+                        // Scroll to errors
+                        errorsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    } else {
+                        // No errors found, might be success - reload page
+                        window.location.reload();
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                errorsDiv.innerHTML = '<div class="d-flex align-items-start"><i class="fas fa-exclamation-circle me-2 mt-1"></i><div>Something went wrong. Please try again.</div></div>';
+                errorsDiv.classList.remove('d-none');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            });
+        });
+    </script>
 </body>
 </html>
+
+
+
+
+
+

@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="/medi/assets/css/style.css" rel="stylesheet" />
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .logo-container {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
             border-radius: 20px;
             display: flex;
             align-items: center;
@@ -218,7 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         .form-control:focus {
-            border-color: #667eea;
+            border-color: #0d6efd;
             box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
             transform: translateY(-2px);
         }
@@ -254,12 +254,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         .password-toggle:hover {
-            color: #667eea;
+            color: #0d6efd;
         }
         
         /* Button Styles */
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
             border: none;
             border-radius: 12px;
             padding: 14px;
@@ -362,7 +362,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         .forgot-password a {
-            color: #667eea;
+            color: #0d6efd;
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 500;
@@ -370,7 +370,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         .forgot-password a:hover {
-            color: #764ba2;
+            color: #0a58ca;
             text-decoration: underline;
         }
         
