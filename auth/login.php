@@ -11,6 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $errors = [];
 $successMessage = null;
 $successRedirect = null;
+$isAjaxRequest = (
+    isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+) || (
+    isset($_SERVER['HTTP_ACCEPT']) && stripos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false
+);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
@@ -45,6 +50,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = 'Account not found.';
         }
         $stmt->close();
+    }
+
+    $isSuccessful = empty($errors) && $successRedirect;
+
+    if ($isAjaxRequest) {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => $isSuccessful,
+            'message' => $successMessage,
+            'redirect' => $successRedirect,
+            'errors' => $errors,
+        ]);
+        exit;
+    }
+
+    if ($isSuccessful) {
+        header('Location: ' . $successRedirect);
+        exit;
     }
 }
 ?>

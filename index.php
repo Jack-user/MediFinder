@@ -944,37 +944,53 @@ $isLoggedIn = isset($_SESSION['user_id']);
             fetch('/medi/auth/login.php', {
                 method: 'POST',
                 body: formData,
-                redirect: 'follow'
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
             })
-            .then(response => {
-                if (response.redirected) {
-                    // Success - redirect to the new page
-                    window.location.href = response.url;
+            .then(async response => {
+                const contentType = (response.headers.get('content-type') || '').toLowerCase();
+                if (contentType.includes('application/json')) {
+                    return response.json();
+                }
+                return {
+                    success: false,
+                    html: await response.text()
+                };
+            })
+            .then(data => {
+                if (!data) {
+                    throw new Error('Empty response');
+                }
+
+                if (data.success) {
+                    window.location.href = data.redirect || '/medi/';
                     return;
                 }
-                return response.text();
-            })
-            .then(html => {
-                if (html) {
-                    // Parse the response to check for errors
+
+                let errorMessages = Array.isArray(data.errors) ? data.errors : [];
+
+                if (!errorMessages.length && data.html) {
                     const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
+                    const doc = parser.parseFromString(data.html, 'text/html');
                     const errorAlert = doc.querySelector('.alert-danger');
-                    
                     if (errorAlert) {
-                        // Show errors in modal
-                        const errorText = errorAlert.textContent || errorAlert.innerText;
-                        errorsDiv.innerHTML = '<div class="d-flex align-items-start"><i class="fas fa-exclamation-circle me-2 mt-1"></i><div>' + errorText + '</div></div>';
-                        errorsDiv.classList.remove('d-none');
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalBtnText;
-                        // Scroll to errors
-                        errorsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    } else {
-                        // No errors found, might be success - reload page
-                        window.location.reload();
+                        const text = errorAlert.textContent || errorAlert.innerText || '';
+                        if (text.trim()) {
+                            errorMessages = text.trim().split('\n').map(msg => msg.trim()).filter(Boolean);
+                        }
                     }
                 }
+
+                if (!errorMessages.length) {
+                    errorMessages = ['Something went wrong. Please try again.'];
+                }
+
+                errorsDiv.innerHTML = '<div class="d-flex align-items-start"><i class="fas fa-exclamation-circle me-2 mt-1"></i><div>' + errorMessages.map(msg => `<div>${msg}</div>`).join('') + '</div></div>';
+                errorsDiv.classList.remove('d-none');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+                errorsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             })
             .catch(error => {
                 console.error('Error:', error);
