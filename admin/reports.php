@@ -116,7 +116,7 @@ $inventoryLeaders = array_slice($inventoryStats, 0, 5);
         <?php
         $pageTitle = 'Reports';
         $breadcrumbItems = ['Admin', 'Reports'];
-        $activeItem = 'Reports';
+        $activeItem = '';
         include __DIR__ . '/../includes/breadcrumb.php';
         ?>
 

@@ -103,7 +103,7 @@ if ($inventoryCount > 1) {
     <meta name="author" content="MediFinder" />
 
     <!-- [Favicon] icon -->
-    <link rel="icon" href="/medi/assets/img/medifinder-logo.svg" type="image/x-icon" />
+    <link rel="icon" href="/medi/assets/img/image.png.svg" type="image/x-icon" />
 
     <?php include __DIR__ . '/../includes/head-css.php'; ?>
     <style>

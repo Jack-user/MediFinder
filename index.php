@@ -31,15 +31,26 @@ $isLoggedIn = isset($_SESSION['user_id']);
             backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.95) !important;
             transition: all 0.3s ease;
+            padding-top: 1px;
+            padding-bottom: 1px;
+            min-height: auto;
         }
-        
+        .navbar .container {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
         .navbar-brand {
-            transition: transform 0.3s ease;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-bottom: 0;
         }
-        
-        .navbar-brand:hover {
-            transform: scale(1.05);
+        .navbar-nav {
+            margin-bottom: 0 !important;
         }
+        .navbar-collapse {
+            padding-bottom: 0;
+        }
+                
         
         .nav-link {
             position: relative;
@@ -350,9 +361,9 @@ $isLoggedIn = isset($_SESSION['user_id']);
 <body>
     <nav class="navbar navbar-expand-lg navbar-light shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="/medi/">
-                <img src="/medi/assets/img/medifinder-logo.svg" alt="MediFinder" width="40" height="40" class="me-2">
-                <strong style="font-size: 1.3rem;">MediFinder</strong>
+            <a class="navbar-brand d-flex align-items-center" href="/medi/" style="gap: 0;">
+                <img src="/medi/assets/img/m.png" alt="MediFinder" width="120" height="120" style="margin-right: -12px; display: block; vertical-align: middle;">
+                <strong style="font-size: 1.3rem; margin-left: -12px;">MediFinder</strong>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -407,7 +418,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
                     </div>
                 </div>
                 <div class="col-lg-6 text-center mt-5 mt-lg-0">
-                    <img src="/medi/assets/img/hero-medicine.svg?v=<?php echo time(); ?>" class="img-fluid hero-illustration" alt="Medicine Illustration" style="max-width: 500px;">
+                    <img src="/medi/assets/img/h.png?v=<?php echo time(); ?>" class="img-fluid hero-illustration" alt="Medicine Illustration" style="max-width: 600px;">
                 </div>
             </div>
         </div>
@@ -532,7 +543,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
             <div class="cta-card fade-in">
                 <div class="row align-items-center g-4">
                     <div class="col-lg-6">
-                        <img src="/medi/assets/img/prescription-mock.svg" class="img-fluid rounded" alt="Prescription Upload" style="max-width: 400px;">
+                        <img src="/medi/assets/img/h.png" class="img-fluid rounded" alt="Prescription Upload" style="max-width: 400px;">
                     </div>
                     <div class="col-lg-6 position-relative">
                         <h3 class="fw-bold display-6 mb-4">Start Your Free Account Today</h3>
@@ -606,6 +617,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Scroll Animation
         const observerOptions = {
@@ -766,28 +778,43 @@ $isLoggedIn = isset($_SESSION['user_id']);
                     <div id="registerFormErrors" class="alert alert-danger d-none" role="alert"></div>
                     <form id="registerForm" method="post" action="/medi/auth/register.php">
                         <div class="mb-4">
-                            <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-lg" name="name" placeholder="e.g., Jane Dela Cruz" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px;">
+                            <label class="form-label fw-semibold"><i class="fas fa-user me-2 text-primary"></i>Full Name <span class="text-danger">*</span></label>
+                            <div class="position-relative">
+                                <i class="fas fa-user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; z-index: 10;"></i>
+                                <input type="text" class="form-control form-control-lg" name="name" placeholder="e.g., Jane Dela Cruz" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px 12px 45px;">
+                            </div>
                         </div>
                         <div class="mb-4">
-                            <label class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control form-control-lg" name="email" placeholder="you@example.com" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px;">
+                            <label class="form-label fw-semibold"><i class="fas fa-envelope me-2 text-primary"></i>Email Address <span class="text-danger">*</span></label>
+                            <div class="position-relative">
+                                <i class="fas fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; z-index: 10;"></i>
+                                <input type="email" class="form-control form-control-lg" name="email" placeholder="you@example.com" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px 12px 45px;">
+                            </div>
                         </div>
                         <div class="mb-4">
-                            <label class="form-label fw-semibold">Account Type <span class="text-danger">*</span></label>
-                            <select class="form-select form-select-lg" name="role" id="roleSelect" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px;">
-                                <option value="patient">Client — find medicines & set reminders</option>
-                                <option value="pharmacy_owner">Pharmacy Owner — list your pharmacy</option>
-                            </select>
-                            <small class="text-muted d-block mt-2">Need an admin account? Contact support.</small>
+                            <label class="form-label fw-semibold"><i class="fas fa-briefcase me-2 text-primary"></i>Account Type <span class="text-danger">*</span></label>
+                            <div class="position-relative">
+                                <i class="fas fa-briefcase" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; z-index: 10;"></i>
+                                <select class="form-select form-select-lg" name="role" id="roleSelect" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px 12px 45px; appearance: none; background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%2394a3b8\'><path d=\'M7 10l5 5 5-5z\'/></svg>'); background-repeat: no-repeat; background-position: right 16px center; background-size: 16px;">
+                                    <option value="patient">Client — find medicines & set reminders</option>
+                                    <option value="pharmacy_owner">Pharmacy Owner — list your pharmacy</option>
+                                </select>
+                            </div>
+                            <small class="text-muted d-block mt-2"><i class="fas fa-info-circle me-1"></i>Need an admin account? Contact support.</small>
                         </div>
                         <div class="mb-4">
-                            <label class="form-label fw-semibold">Password <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control form-control-lg" name="password" placeholder="Minimum 6 characters" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px;">
+                            <label class="form-label fw-semibold"><i class="fas fa-lock me-2 text-primary"></i>Password <span class="text-danger">*</span></label>
+                            <div class="position-relative">
+                                <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; z-index: 10;"></i>
+                                <input type="password" class="form-control form-control-lg" name="password" placeholder="Minimum 6 characters" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 45px 12px 45px;">
+                            </div>
                         </div>
                         <div class="mb-4">
-                            <label class="form-label fw-semibold">Confirm Password <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control form-control-lg" name="confirm" placeholder="Re-type password" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 16px;">
+                            <label class="form-label fw-semibold"><i class="fas fa-lock me-2 text-primary"></i>Confirm Password <span class="text-danger">*</span></label>
+                            <div class="position-relative">
+                                <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; z-index: 10;"></i>
+                                <input type="password" class="form-control form-control-lg" name="confirm" placeholder="Re-type password" required style="border-radius: 12px; border: 2px solid #e2e8f0; padding: 12px 45px 12px 45px;">
+                            </div>
                         </div>
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg" style="border-radius: 14px; padding: 15px; font-weight: 600;">
@@ -957,12 +984,41 @@ $isLoggedIn = isset($_SESSION['user_id']);
                 submitBtn.innerHTML = originalBtnText;
             });
         });
+
+        // Prevent page reload when clicking MediFinder logo/name
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbarBrand = document.querySelector('.navbar-brand[href="/medi/"]');
+            if (navbarBrand) {
+                navbarBrand.addEventListener('click', function(e) {
+                    const currentPath = window.location.pathname;
+                    const linkHref = this.getAttribute('href');
+                    
+                    // If we're already on the target page, prevent reload
+                    if (currentPath === linkHref || currentPath === linkHref + 'index.php') {
+                        e.preventDefault();
+                        // Smooth scroll to top instead
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            }
+        });
+
+        const logoutNotice = <?php echo isset($_GET['logout']) ? 'true' : 'false'; ?>;
+        if (logoutNotice) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Signed out',
+                text: 'You have been logged out successfully.',
+                confirmButtonColor: '#667eea'
+            }).then(() => {
+                const currentUrl = new URL(window.location.href);
+                currentUrl.searchParams.delete('logout');
+                window.history.replaceState({}, document.title, currentUrl.pathname + (currentUrl.search ? '?' + currentUrl.searchParams.toString() : '') + currentUrl.hash);
+            });
+        }
     </script>
 </body>
 </html>
-
-
-
-
-
-

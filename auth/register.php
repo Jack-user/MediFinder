@@ -2,7 +2,15 @@
 session_start();
 require_once __DIR__ . '/../includes/db.php';
 
+// Redirect to home if accessed directly (not via POST from modal)
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: /medi/index.php');
+    exit;
+}
+
 $errors = [];
+$successMessage = null;
+$successRedirect = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
@@ -50,11 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_role'] = $role;
                 // Route user based on role
                 if ($role === 'pharmacy_owner') {
-                    header('Location: /medi/auth/register_pharmacy.php');
+                    $successRedirect = '/medi/auth/register_pharmacy.php';
+                    $successMessage = 'Account created! Continue your pharmacy registration.';
                 } else {
-                    header('Location: /medi/patient/');
+                    $successRedirect = '/medi/patient/';
+                    $successMessage = 'Account created successfully! Redirecting to your dashboard.';
                 }
-                exit;
             } else {
                 $errors[] = 'Registration failed. Try again.';
             }
@@ -379,7 +388,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
                 <?php if ($errors): ?>
-                    <div class="alert alert-danger">
+                    <div class="alert alert-danger d-none" role="alert">
                         <strong>Please fix the following:</strong>
                         <ul class="mb-0 mt-2">
                             <?php foreach ($errors as $e): ?><li><?php echo htmlspecialchars($e); ?></li><?php endforeach; ?>
@@ -449,6 +458,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-Bx1wTuK0vGdgJo+d5QNt/hJik7l2c3hUlY0wyK8fAwIMv0YYemAgFJBFA8QgJFK0tJdVvLv/MxJ7N7x+Yp9aQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         const roleSelect = document.getElementById('roleSelect');
@@ -459,6 +469,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const successMessage = <?php echo json_encode($successMessage); ?>;
+            const successRedirect = <?php echo json_encode($successRedirect); ?>;
+            const errorMessages = <?php echo json_encode($errors ? array_map('htmlspecialchars', $errors) : []); ?>;
+
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registration complete',
+                    text: successMessage,
+                    confirmButtonColor: '#667eea',
+                    timer: 2200,
+                    timerProgressBar: true,
+                }).then(() => {
+                    window.location.href = successRedirect || '/medi/';
+                });
+            } else if (errorMessages.length) {
+                const htmlList = `<ul class="text-start mb-0">${errorMessages.map(msg => `<li>${msg}</li>`).join('')}</ul>`;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Please check the form',
+                    html: htmlList,
+                    confirmButtonColor: '#667eea'
+                });
+            }
+        });
     </script>
     </body>
     </html>

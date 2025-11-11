@@ -33,7 +33,7 @@ if ($stmt) {
     <meta name="author" content="MediFinder" />
 
     <!-- [Favicon] icon -->
-    <link rel="icon" href="/medi/assets/img/medifinder-logo.svg" type="image/x-icon" />
+    <link rel="icon" href="/medi/assets/img/image.png" type="image/x-icon" />
 
     <?php include __DIR__ . '/../includes/head-css.php'; ?>
     <style>
@@ -98,12 +98,7 @@ if ($stmt) {
 
           <div class="col-span-12">
             <div class="card">
-              <div class="card-header border-0 pb-0">
-                <div>
-                  <h5 class="mb-1 font-semibold">Latest Pharmacy Registrations</h5>
-                  <p class="text-muted mb-0 text-sm">Most recent five registrations awaiting review</p>
-                </div>
-              </div>
+            
               <div class="card-body pt-3">
                 <div class="table-responsive">
                   <table class="table align-middle mb-0">

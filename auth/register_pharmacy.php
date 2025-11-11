@@ -119,9 +119,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register Pharmacy — MediFinder</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/CEMO_System/system/assets/css/style.css" rel="stylesheet" />
+    <link href="/medi/assets/css/style.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
@@ -504,7 +505,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             
                             <?php if ($errors): ?>
-                                <div class="alert alert-danger">
+                                <div class="alert alert-danger d-none" role="alert">
                                     <div class="d-flex align-items-start">
                                         <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
                                         <div>
@@ -582,6 +583,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                     <i class="fas fa-times me-2"></i>Clear Extraction
                                                                 </button>
                                                             </div>
+                                                            <p class="text-muted small mb-3">
+                                                                <i class="fas fa-exclamation-circle me-1 text-warning"></i>
+                                                                After extraction, a review alert will appear—always verify each auto-filled field before submitting.
+                                                            </p>
                                                             <div id="ocrStatus" class="alert alert-info" style="display: none;">
                                                                 <i class="fas fa-spinner fa-spin me-2"></i><span id="ocrStatusText">Processing...</span>
                                                             </div>
@@ -683,6 +688,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const successState = <?php echo $success ? 'true' : 'false'; ?>;
+        const errorMessages = <?php echo json_encode($errors ? array_map('htmlspecialchars', $errors) : []); ?>;
+
+        if (successState) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Registration submitted!',
+                text: 'Your pharmacy registration has been received and is awaiting review.',
+                confirmButtonColor: '#667eea'
+            });
+        } else if (errorMessages.length) {
+            const htmlList = `<ul class="text-start mb-0">${errorMessages.map(msg => `<li>${msg}</li>`).join('')}</ul>`;
+            Swal.fire({
+                icon: 'error',
+                title: 'We found some issues',
+                html: htmlList,
+                confirmButtonColor: '#667eea'
+            });
+        }
+    });
+
     // Initialize map
     const CITY_CENTER = { lat: 10.5335, lon: 122.8338 };
     const CITY_BOUNDS = L.latLngBounds([ [10.40, 122.70], [10.65, 122.95] ]);
@@ -787,7 +814,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         try {
-            const response = await fetch(`/CEMO_System/system/api/reverse_geocode.php?lat=${encodeURIComponent(latNum)}&lon=${encodeURIComponent(lonNum)}`);
+            const response = await fetch(`/medi/api/reverse_geocode.php?lat=${encodeURIComponent(latNum)}&lon=${encodeURIComponent(lonNum)}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch address');
             }
@@ -993,6 +1020,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Auto-fill form fields
             autoFillForm(text);
             
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Review Required',
+                    html: 'We filled in details from the license. Please double-check every field before submitting.',
+                    confirmButtonText: 'Got it',
+                    confirmButtonColor: '#3b82f6',
+                });
+            }
+            
         } catch (error) {
             console.error('OCR Error:', error);
             ocrStatus.className = 'alert alert-danger';
@@ -1015,36 +1052,181 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         
         // Extract License Number (common patterns: ABC-123456, LTO-123456, etc.)
+        const formatLicenseNumber = (value, originalText) => {
+            const cleaned = value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+            if (!cleaned) return '';
+
+            const aheadMatch = originalText.match(/(?:LICENSE|PERMIT|LIC\.?|REG\.?|#|NO\.?|NUMBER)[:\s\-]*([A-Z0-9\-]+)/i);
+            if (aheadMatch && aheadMatch[1]) {
+                const candidate = aheadMatch[1].trim();
+                if (/^[A-Z]{2,4}-\d{4}-\d{4,6}$/.test(candidate)) {
+                    return candidate.toUpperCase();
+                }
+            }
+
+            const fullPattern = cleaned.match(/^([A-Z]{2,4})(\d{4})(\d{4,6})$/);
+            if (fullPattern) {
+                return `${fullPattern[1]}-${fullPattern[2]}-${fullPattern[3]}`;
+            }
+
+            if (cleaned.length >= 12 && /^[A-Z]{2,4}\d+$/.test(cleaned)) {
+                const letters = cleaned.match(/^[A-Z]{2,4}/)?.[0] ?? '';
+                const digits = cleaned.slice(letters.length);
+                const year = digits.slice(0, 4);
+                const suffix = digits.slice(4, digits.length > 8 ? 10 : digits.length);
+                if (letters && year && suffix) {
+                    const remainder = digits.slice(4);
+                    return `${letters}-${year}-${remainder}`;
+                }
+            }
+
+            const letterYearPattern = cleaned.match(/^([A-Z]{2,4})(\d{4,6})$/);
+            if (letterYearPattern) {
+                const letters = letterYearPattern[1];
+                const rest = letterYearPattern[2];
+                if (rest.length >= 4) {
+                    const year = rest.slice(0, 4);
+                    const suffix = rest.slice(4);
+                    return suffix ? `${letters}-${year}-${suffix}` : `${letters}-${year}`;
+                }
+                return `${letters}-${rest}`;
+            }
+
+            const genericSplit = cleaned.match(/^([A-Z]+)(\d+)$/);
+            if (genericSplit) {
+                return `${genericSplit[1]}-${genericSplit[2]}`;
+            }
+            return cleaned;
+        };
+
         const licensePatterns = [
-            /(?:LICENSE|PERMIT|LIC\.?|REG\.?)[\s#:]*([A-Z]{2,4}[-]?\d{4,8})/i,
-            /([A-Z]{2,4}[-]?\d{4,8})/,
-            /(?:NO\.?|NUMBER|#)[\s:]*([A-Z]{0,4}[-]?\d{4,8})/i
+            /(?:LICENSE|PERMIT|LIC\.?|REG\.?)[\s#:]*([A-Z]{2,4}[-\s]?\d{4}(?:[-\s]?\d{2,6})?)/i,
+            /([A-Z]{2,4}[-\s]?\d{4}(?:[-\s]?\d{2,6})?)/,
+            /(?:NO\.?|NUMBER|#)[\s:]*([A-Z]{0,4}[-\s]?\d{4}(?:[-\s]?\d{2,6})?)/i
         ];
         
         for (const pattern of licensePatterns) {
             const match = text.match(pattern);
             if (match && match[1]) {
+                const rawLicense = match[1]
+                    .replace(/LICENSE\s*NO\.?/i, '')
+                    .replace(/#/g, '')
+                    .replace(/[:]/g, '')
+                    .trim();
+                const licenseValue = formatLicenseNumber(rawLicense, text);
                 const licenseField = document.querySelector('input[name="license_number"]');
-                if (licenseField && !licenseField.value) {
-                    licenseField.value = match[1].trim();
+                if (licenseField && !licenseField.value && licenseValue) {
+                    licenseField.value = licenseValue;
                     licenseField.classList.add('is-valid');
                 }
                 break;
             }
         }
-        
-        // Extract Pharmacy Name (look for "PHARMACY", "DRUGSTORE", "CLINIC" keywords)
-        const pharmacyKeywords = ['PHARMACY', 'DRUGSTORE', 'DRUG STORE', 'CLINIC', 'MEDICAL', 'HEALTH'];
-        for (const line of lines) {
-            const upperLine = line.toUpperCase();
-            for (const keyword of pharmacyKeywords) {
-                if (upperLine.includes(keyword) && line.length > 5 && line.length < 100) {
-                    const pharmacyField = document.querySelector('input[name="pharmacy_name"]');
-                    if (pharmacyField && !pharmacyField.value) {
-                        pharmacyField.value = line.trim();
-                        pharmacyField.classList.add('is-valid');
+
+        const licenseField = document.querySelector('input[name="license_number"]');
+        if (licenseField && !licenseField.value) {
+            for (const line of lines) {
+                if (/LICENSE|PERMIT|LIC\.?|REG\./i.test(line)) {
+                    const inlineMatch = line.match(/(?:LICENSE|PERMIT|LIC\.?|REG\.?|#|NO\.?|NUMBER)[:\s\-]*([A-Z0-9\-]+)/i);
+                    if (inlineMatch && inlineMatch[1]) {
+                        const formatted = formatLicenseNumber(inlineMatch[1], line);
+                        if (formatted) {
+                            licenseField.value = formatted;
+                            licenseField.classList.add('is-valid');
+                            break;
+                        }
                     }
-                    break;
+                }
+            }
+        }
+        
+        // Extract Pharmacy Name (prefer lines containing "PHARMACY" and ignore certificate headings)
+        const pharmacyField = document.querySelector('input[name="pharmacy_name"]');
+        if (pharmacyField) {
+            const bannedPrefixes = [
+                'REPUBLIC', 'REPUBLIC OF', 'CERTIFICATE', 'THIS CERTIFIES', 'THIS IS TO CERTIFY', 'DEPARTMENT', 'DEPARTMENT OF',
+                'REPUBLICA', 'PEOPLE OF', 'PEOPLE\'S REPUBLIC'
+            ];
+            const bannedContains = ['CERTIFICATE NO', 'LICENSE NO', 'PERMIT NO', 'THIS IS TO CERTIFY', 'THIS CERTIFIES'];
+            const ditchWords = ['DOING BUSINESS AS', 'DBA', 'TRADING AS', 'FORMERLY KNOWN AS', 'FKA', 'ALSO KNOWN AS', 'AKA'];
+
+            const hasBannedPrefix = (line) => {
+                const upper = line.toUpperCase();
+                return bannedPrefixes.some((prefix) => upper.startsWith(prefix));
+            };
+
+            const hasBannedContains = (line) => {
+                const upper = line.toUpperCase();
+                return bannedContains.some((token) => upper.includes(token));
+            };
+
+            const stripDitchWords = (line) => {
+                let cleaned = line;
+                ditchWords.forEach((word) => {
+                    const idx = cleaned.toUpperCase().indexOf(word);
+                    if (idx >= 0) {
+                        cleaned = cleaned.slice(0, idx);
+                    }
+                });
+                return cleaned.trim();
+            };
+
+            const plausibleLines = lines
+                .map((line) => stripDitchWords(line))
+                .map((line) => line.replace(/[^A-Za-z0-9\s&',.-]/g, '').replace(/\s{2,}/g, ' ').trim())
+                .filter((line, index, self) => line.length > 5 && self.indexOf(line) === index);
+
+            const keywordLines = plausibleLines.filter((line) => {
+                const upper = line.toUpperCase();
+                return (
+                    upper.includes('PHARMACY') &&
+                    !hasBannedPrefix(upper) &&
+                    !hasBannedContains(upper) &&
+                    upper.length <= 80
+                );
+            });
+
+            const candidatePool = keywordLines.length > 0 ? keywordLines : plausibleLines.filter((line) => {
+                const upper = line.toUpperCase();
+                return (
+                    !hasBannedPrefix(upper) &&
+                    !hasBannedContains(upper) &&
+                    upper.length <= 60 &&
+                    upper.split(' ').length >= 2
+                );
+            });
+
+            if (candidatePool.length === 0) {
+                return;
+            }
+
+            const scoreLine = (line) => {
+                const upper = line.toUpperCase();
+                let score = 0;
+                if (upper.includes('PHARMACY')) score += 10;
+                if (upper.includes('DRUG')) score += 6;
+                if (upper.includes('MEDICAL')) score += 4;
+                if (upper.includes('HEALTH')) score += 4;
+                if (/PHARMA\b/.test(upper)) score += 3;
+                if (/ (INC|LLC|LTD|CORP|CO)\b/.test(upper)) score += 2;
+                const wordCount = upper.split(' ').filter(Boolean).length;
+                score += Math.min(wordCount, 6);
+                score += Math.min(upper.length / 5, 8);
+                return score;
+            };
+
+            const bestLine = candidatePool
+                .map((line) => ({ line, score: scoreLine(line) }))
+                .sort((a, b) => b.score - a.score || b.line.length - a.line.length)[0];
+
+            if (bestLine && bestLine.line) {
+                const cleanedCandidate = bestLine.line
+                    .replace(/\b(PHARMACY\s*NAME|BUSINESS\s*NAME|NAME\s*OF\s*PHARMACY|REGISTERED\s*NAME)\b[:\-]*/i, '')
+                    .replace(/^[^A-Za-z0-9]+/, '')
+                    .trim();
+                if ((!pharmacyField.value || pharmacyField.value.length < 3) && cleanedCandidate.length > 2) {
+                    pharmacyField.value = cleanedCandidate;
+                    pharmacyField.classList.add('is-valid');
                 }
             }
         }
@@ -1067,45 +1249,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         
-        // Extract Phone Numbers (Philippines format: +63, 09, etc.)
-        const phonePatterns = [
-            /(?:\+63|0)?[\s-]?(\d{3}[\s-]?\d{3}[\s-]?\d{4})/g,
-            /(?:TEL|PHONE|MOBILE|CELL)[\s:]*([\d\s\-+()]+)/i
-        ];
-        
-        for (const pattern of phonePatterns) {
-            const matches = text.match(pattern);
-            if (matches) {
-                const phoneField = document.querySelector('input[name="phone"]');
-                if (phoneField && !phoneField.value && matches.length > 0) {
-                    let phone = matches[0].replace(/[^\d+]/g, '');
-                    if (phone.startsWith('63')) phone = '+' + phone;
-                    else if (phone.startsWith('0')) phone = '+63' + phone.substring(1);
-                    else if (!phone.startsWith('+')) phone = '+63' + phone;
-                    phoneField.value = phone;
-                    phoneField.classList.add('is-valid');
+        // Extract Phone Numbers (Philippines format: +63, 09, etc.) and map to phone/owner contact
+        const normalizePhone = (value) => {
+            let phone = value.replace(/[^\d+]/g, '');
+            if (!phone) return null;
+            if (phone.startsWith('+63')) {
+                return '+63' + phone.slice(3);
+            }
+            if (phone.startsWith('63')) {
+                return '+63' + phone.slice(2);
+            }
+            if (phone.startsWith('0')) {
+                return '+63' + phone.slice(1);
+            }
+            if (!phone.startsWith('+')) {
+                if (phone.length >= 10 && phone.length <= 12) {
+                    return '+63' + phone;
                 }
-                break;
+                return null;
+            }
+            return phone;
+        };
+
+        const phoneCandidates = [];
+        const rawPhoneMatches = text.match(/(?:\+?63|\b0)[\d\s\-()]{7,}/g) || [];
+        rawPhoneMatches.forEach((raw) => {
+            const normalized = normalizePhone(raw);
+            if (normalized && !phoneCandidates.includes(normalized)) {
+                phoneCandidates.push(normalized);
+            }
+        });
+
+        if (phoneCandidates.length === 0) {
+            const labelledMatches = [...text.matchAll(/(?:TEL|PHONE|MOBILE|CELL)[\s:]*([\d\s\-+()]+)/gi)];
+            labelledMatches.forEach((match) => {
+                if (match[1]) {
+                    const normalized = normalizePhone(match[1]);
+                    if (normalized && !phoneCandidates.includes(normalized)) {
+                        phoneCandidates.push(normalized);
+                    }
+                }
+            });
+        }
+
+        if (phoneCandidates.length > 0) {
+            const phoneField = document.querySelector('input[name="phone"]');
+            if (phoneField && !phoneField.value) {
+                phoneField.value = phoneCandidates[0];
+                phoneField.classList.add('is-valid');
             }
         }
-        
-        // Extract Address (look for common address keywords)
-        const addressKeywords = ['STREET', 'AVE', 'AVENUE', 'ROAD', 'RD', 'BRGY', 'BARANGAY', 'CITY', 'PROVINCE'];
-        const addressLines = [];
-        for (const line of lines) {
-            const upperLine = line.toUpperCase();
-            if (addressKeywords.some(keyword => upperLine.includes(keyword)) || 
-                /^\d+/.test(line) || 
-                (line.length > 10 && line.length < 100)) {
-                addressLines.push(line);
-            }
-        }
-        
-        if (addressLines.length > 0) {
-            const addressField = document.querySelector('textarea[name="address"]');
-            if (addressField && !addressField.value) {
-                addressField.value = addressLines.join(', ');
-                addressField.classList.add('is-valid');
+
+        if (phoneCandidates.length > 1) {
+            const ownerContactField = document.querySelector('input[name="owner_contact"]');
+            if (ownerContactField && !ownerContactField.value) {
+                ownerContactField.value = phoneCandidates[1];
+                ownerContactField.classList.add('is-valid');
             }
         }
         
@@ -1119,12 +1318,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (nameMatch && nameMatch[1]) {
                         const nameField = document.querySelector('input[name="name"]');
                         if (nameField && !nameField.value) {
-                            nameField.value = nameMatch[1].trim();
-                            nameField.classList.add('is-valid');
+                            const cleanName = nameMatch[1]
+                                .replace(/\b(LICENSED|LICENSEE|LICENSE|PHARMACIST|PHARMACISTS|RPH|PRC)\b/gi, '')
+                                .replace(/[:]/g, ' ')
+                                .replace(/[^A-Za-z\s'.-]/g, '')
+                                .replace(/\s+/g, ' ')
+                                .trim();
+                            if (cleanName.length > 1) {
+                                nameField.value = cleanName;
+                                nameField.classList.add('is-valid');
+                            }
+                        }
+                    } else {
+                        const nameField = document.querySelector('input[name="name"]');
+                        if (nameField && !nameField.value && line.length <= 60) {
+                            const potentialName = line
+                                .replace(/\b(LICENSED|LICENSEE|LICENSE|PHARMACIST|PHARMACISTS|RPH|PRC)\b/gi, '')
+                                .replace(/[:]/g, ' ')
+                                .replace(/[^A-Za-z\s'.-]/g, '')
+                                .replace(/\s+/g, ' ')
+                                .trim();
+                            if (potentialName && potentialName.split(' ').length >= 2) {
+                                nameField.value = potentialName;
+                                nameField.classList.add('is-valid');
+                            }
                         }
                     }
                     break;
                 }
+            }
+        }
+        
+        // Extract Email Address
+        const emailMatch = text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+        if (emailMatch) {
+            const emailField = document.querySelector('input[name="email"]');
+            if (emailField && !emailField.value) {
+                emailField.value = emailMatch[0].trim();
+                emailField.classList.add('is-valid');
             }
         }
         

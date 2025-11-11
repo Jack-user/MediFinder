@@ -2,7 +2,15 @@
 session_start();
 require_once __DIR__ . '/../includes/db.php';
 
+// Redirect to home if accessed directly (not via POST from modal)
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: /medi/index.php');
+    exit;
+}
+
 $errors = [];
+$successMessage = null;
+$successRedirect = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
@@ -19,17 +27,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_id'] = $userId;
                 $_SESSION['user_name'] = $name;
                 $_SESSION['user_role'] = $role ?? 'patient';
-                
-                // Redirect based on role (use session role to ensure consistency)
+
+                // Redirect based on role
                 $userRole = $_SESSION['user_role'];
+                $successRedirect = '/medi/patient/index.php';
                 if ($userRole === 'pharmacy_owner') {
-                    header('Location: /medi/pharmacy/index.php');
+                    $successRedirect = '/medi/pharmacy/index.php';
                 } elseif ($userRole === 'admin') {
-                    header('Location: /medi/admin/index.php');
-                } else {
-                    header('Location: /medi/patient/index.php');
+                    $successRedirect = '/medi/admin/index.php';
                 }
-                exit;
+
+                $successMessage = "Welcome back, {$name}!";
             } else {
                 $errors[] = 'Invalid credentials.';
             }
@@ -425,7 +433,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             
             <?php if ($errors): ?>
-                <div class="alert alert-danger">
+                <div class="alert alert-danger d-none" role="alert">
                     <div class="d-flex align-items-start">
                         <i class="fas fa-exclamation-circle me-2 mt-1"></i>
                         <div>
@@ -512,6 +520,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Password Toggle
         function togglePassword() {
@@ -558,6 +567,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             if (!isValid) {
                 e.preventDefault();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const successMessage = <?php echo json_encode($successMessage); ?>;
+            const successRedirect = <?php echo json_encode($successRedirect); ?>;
+            const errorMessages = <?php echo json_encode($errors ? array_map('htmlspecialchars', $errors) : []); ?>;
+
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Login successful',
+                    text: successMessage,
+                    confirmButtonColor: '#667eea',
+                    timer: 1800,
+                    timerProgressBar: true,
+                }).then(() => {
+                    window.location.href = successRedirect || '/medi/';
+                });
+            } else if (errorMessages.length) {
+                const htmlList = `<ul class="text-start mb-0">${errorMessages.map(msg => `<li>${msg}</li>`).join('')}</ul>`;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Unable to sign in',
+                    html: htmlList,
+                    confirmButtonColor: '#667eea'
+                });
             }
         });
     </script>

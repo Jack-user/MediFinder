@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import os
 import re
 import sys
@@ -31,6 +32,17 @@ import cv2  # type: ignore
 import numpy as np
 from PIL import Image
 import pytesseract
+import requests
+
+
+logger = logging.getLogger(__name__)
+
+_OCR_SERVICE_URL = os.getenv("OCR_SERVICE_URL")
+try:
+    _OCR_SERVICE_TIMEOUT = float(os.getenv("OCR_SERVICE_TIMEOUT", "25"))
+except ValueError:
+    _OCR_SERVICE_TIMEOUT = 25.0
+_OCR_SESSION: Optional[requests.Session] = None
 
 
 def _load_image(path: str) -> np.ndarray:
@@ -117,6 +129,22 @@ def _boost_edges(gray: np.ndarray) -> Tuple[np.ndarray, List[str]]:
     boosted = cv2.addWeighted(gray, 0.85, abs_laplace, 0.35, 0)
     steps.append("edge_boost")
     return boosted, steps
+
+
+def _normalize_illumination(gray: np.ndarray) -> Tuple[np.ndarray, List[str]]:
+    steps: List[str] = []
+    background = cv2.medianBlur(gray, 31)
+    normalized = cv2.divide(gray, background, scale=255)
+    normalized = np.clip(normalized, 0, 255).astype(np.uint8)
+    steps.append("illumination_normalize")
+    return normalized, steps
+
+
+def _denoise_nlm(gray: np.ndarray) -> Tuple[np.ndarray, List[str]]:
+    steps: List[str] = []
+    denoised = cv2.fastNlMeansDenoising(gray, h=15, templateWindowSize=7, searchWindowSize=21)
+    steps.append("fastnlmeans_denoise")
+    return denoised, steps
 
 
 def _build_variant(
@@ -355,13 +383,51 @@ def _preprocess_variants(
         )
     )
 
+    # Variant I: Illumination normalization + Otsu
+    normalized, norm_steps = _normalize_illumination(gray)
+    _, normalized_otsu = cv2.threshold(normalized, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    variants.append(
+        _build_variant(
+            "illumination_normalized",
+            normalized_otsu,
+            common_steps + norm_steps + ["otsu_threshold_normalized"],
+            common_warnings,
+            closing_kernel=(3, 3),
+        )
+    )
+
+    # Variant J: Non-local means denoise with upscale + adaptive threshold
+    nlm_gray, nlm_steps = _denoise_nlm(gray)
+    upscale_factor = 1.6
+    nlm_upscaled = cv2.resize(nlm_gray, (0, 0), fx=upscale_factor, fy=upscale_factor, interpolation=cv2.INTER_CUBIC)
+    nlm_adaptive = cv2.adaptiveThreshold(
+        nlm_upscaled,
+        255,
+        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        cv2.THRESH_BINARY,
+        25,
+        7,
+    )
+    variants.append(
+        _build_variant(
+            "nlm_upscaled_gaussian",
+            nlm_adaptive,
+            common_steps
+            + nlm_steps
+            + [f"scale_{upscale_factor:.2f}x_pre", "adaptive_threshold_gaussian_nlm"],
+            common_warnings,
+            opening_kernel=(2, 2),
+            closing_kernel=(4, 4),
+        )
+    )
+
     # Variants G/H: Color channel specific binarization
     variants.extend(_color_channel_variants(image, common_steps, common_warnings))
 
     return variants
 
 
-def _run_ocr(
+def _run_ocr_local(
     processed: np.ndarray,
     *,
     lang: str,
@@ -386,6 +452,63 @@ def _run_ocr(
         confidence = None
 
     return text.strip(), confidence
+
+
+def _run_ocr_remote(
+    processed: np.ndarray,
+    *,
+    lang: str,
+    psm: int,
+    oem: int,
+) -> Tuple[str, Optional[float], List[str]]:
+    global _OCR_SESSION
+    if _OCR_SESSION is None:
+        _OCR_SESSION = requests.Session()
+
+    success, encoded = cv2.imencode(".png", processed)
+    if not success:
+        raise RuntimeError("Failed to encode image for OCR service.")
+
+    response = _OCR_SESSION.post(
+        _OCR_SERVICE_URL,  # type: ignore[arg-type]
+        files={"file": ("image.png", encoded.tobytes(), "image/png")},
+        data={"lang": lang, "psm": str(psm), "oem": str(oem)},
+        timeout=_OCR_SERVICE_TIMEOUT,
+    )
+    response.raise_for_status()
+    payload = response.json()
+    warnings = payload.get("warnings") or []
+    if not isinstance(warnings, list):
+        warnings = [str(warnings)]
+    return payload.get("text", "").strip(), payload.get("confidence"), warnings
+
+
+def _run_ocr(
+    processed: np.ndarray,
+    *,
+    lang: str,
+    psm: int,
+    oem: int,
+) -> Tuple[str, Optional[float], List[str]]:
+    warnings: List[str] = []
+    if _OCR_SERVICE_URL:
+        try:
+            text, confidence, service_warnings = _run_ocr_remote(
+                processed,
+                lang=lang,
+                psm=psm,
+                oem=oem,
+            )
+            if service_warnings:
+                warnings.extend(str(w) for w in service_warnings)
+            return text, confidence, warnings
+        except Exception as exc:  # noqa: BLE001
+            fallback_message = f"OCR service failure: {exc}; falling back to local pytesseract."
+            logger.warning(fallback_message)
+            warnings.append(fallback_message)
+
+    text, confidence = _run_ocr_local(processed, lang=lang, psm=psm, oem=oem)
+    return text, confidence, warnings
 
 
 def _save_debug_image(image: np.ndarray) -> Optional[str]:
@@ -423,7 +546,7 @@ def enhance_ocr(
     best_score = float("-inf")
 
     for idx, variant in enumerate(variants):
-        text, confidence = _run_ocr(
+        text, confidence, ocr_warnings = _run_ocr(
             variant["image"],  # type: ignore[dict-item]
             lang=lang,
             psm=psm,
@@ -439,7 +562,7 @@ def enhance_ocr(
                 "text": text,
                 "confidence": confidence,
                 "steps": variant["steps"],
-                "warnings": variant["warnings"],
+                "warnings": list(variant["warnings"]) + ocr_warnings,  # type: ignore[list-item]
             }
         )
 

@@ -96,20 +96,20 @@ $role = $_SESSION['user_role'] ?? 'patient';
             </div>
             <div class="dropdown-body py-4 px-5">
               <div class="profile-notification-scroll position-relative" style="max-height: calc(100vh - 225px)">
-                <a href="/medi/dashboard.php" class="dropdown-item">
+                <!-- <a href="/medi/dashboard.php" class="dropdown-item">
                   <span>
                     <svg class="pc-icon text-muted me-2 inline-block">
                       <use xlink:href="#custom-setting-outline"></use>
                     </svg>
                     <span>Dashboard</span>
                   </span>
-                </a>
-                <a href="/medi/auth/logout.php" class="dropdown-item">
+                </a> -->
+                <a href="/medi/profile.php" class="dropdown-item">
                   <span>
                     <svg class="pc-icon text-muted me-2 inline-block">
-                      <use xlink:href="#custom-lock-outline"></use>
+                      <use xlink:href="#custom-user-outline"></use>
                     </svg>
-                    <span>Logout</span>
+                    <span>View Profile</span>
                   </span>
                 </a>
                 <div class="grid my-3">

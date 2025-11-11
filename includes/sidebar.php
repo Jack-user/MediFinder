@@ -13,31 +13,50 @@ function navActive(string $path, string $currentPath): string {
     background: #ffffff;
     color: #000000;
     box-shadow: 4px 0 24px rgba(15, 23, 42, 0.06);
+    width: 264px !important;
+    min-width: 264px !important;
+    max-width: 264px !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
   }
   .pc-sidebar.white-theme .navbar-wrapper {
     background: transparent;
+    width: 264px !important;
+    min-width: 264px !important;
+    max-width: 264px !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
   }
   .pc-sidebar.white-theme .sidebar-brand {
+    padding: 24px 18px 20px;
     display: flex;
     align-items: center;
-    padding: 24px 18px 16px;
+    justify-content: center;
     border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-    justify-content: flex-start;
+    width: 100%;
+    max-width: 264px;
+    box-sizing: border-box;
+    overflow: hidden;
   }
   .pc-sidebar.white-theme .sidebar-brand a {
     display: flex;
     align-items: center;
-    text-align: left;
+    justify-content: center;
     width: 100%;
-    justify-content: flex-start;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .pc-sidebar.white-theme .sidebar-brand .sidebar-logo {
-    width: 100px;
-    height: 100px;
+    width: auto;
+    height: 90px;
+    max-width: 220px;
     object-fit: contain;
-    flex-shrink: 0;
-    margin-right: 0;
+    flex-shrink: 1;
+    margin: 0 auto;
     padding: 0;
+    background: transparent !important;
+    display: block;
+    box-sizing: border-box;
   }
   .pc-sidebar.white-theme .sidebar-brand .sidebar-title {
     font-weight: 600;
@@ -104,11 +123,6 @@ function navActive(string $path, string $currentPath): string {
 <!-- [ Sidebar Menu ] start -->
 <nav class="pc-sidebar white-theme">
   <div class="navbar-wrapper">
-    <div class="sidebar-brand">
-      <a href="/medi/dashboard.php" class="d-flex align-items-center text-decoration-none">
-        <span class="sidebar-title">MediFinder</span>
-      </a>
-    </div>
     <div class="navbar-content h-[calc(100vh_-_74px)] py-2.5">
       <ul class="pc-navbar">
         <li class="pc-item pc-caption">
@@ -239,6 +253,36 @@ function navActive(string $path, string $currentPath): string {
                 <i class="feather icon-bell"></i>
               </span>
               <span class="pc-mtext">Reminders</span>
+            </a>
+          </li>
+        <?php endif; ?>
+        <!-- <li class="pc-item pc-caption">
+          <label>Account</label>
+        </li> -->
+        <?php if ($isLoggedIn): ?>
+          <!-- <li class="pc-item">
+            <a href="/medi/auth/logout.php" class="pc-link text-danger-500">
+              <span class="pc-micon">
+                <i class="feather icon-log-out"></i>
+              </span>
+              <span class="pc-mtext">Logout</span>
+            </a>
+          </li> -->
+        <?php else: ?>
+          <li class="pc-item">
+            <a href="/medi/auth/login.php" class="pc-link<?php echo navActive('/medi/auth/login.php', $currentPath); ?>">
+              <span class="pc-micon">
+                <i class="feather icon-log-in"></i>
+              </span>
+              <span class="pc-mtext">Login</span>
+            </a>
+          </li>
+          <li class="pc-item">
+            <a href="/medi/auth/register_pharmacy.php" class="pc-link<?php echo navActive('/medi/auth/register_pharmacy.php', $currentPath); ?>">
+              <span class="pc-micon">
+                <i class="feather icon-briefcase"></i>
+              </span>
+              <span class="pc-mtext">Register Pharmacy</span>
             </a>
           </li>
         <?php endif; ?>
